@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3 uid="uid://bbaq0kx2t163y"]
+
+[ext_resource type="Script" uid="uid://bdrbup6sd1t8p" path="res://Scence/character/character.gd" id="1_jpsph"]
+[ext_resource type="Texture2D" uid="uid://bto21ctxfmxig" path="res://assets/assets/art/characters/shadow.png" id="2_7oexw"]
+[ext_resource type="PackedScene" uid="uid://dn2c8knavguqt" path="res://Scence/colliders/damage_emiter.tscn" id="3_7oexw"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0hjmp"]
+size = Vector2(10, 6)
+
+[node name="Character" type="CharacterBody2D"]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_jpsph")
+health = 40
+damage = 10
+
+[node name="ShadowSprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_7oexw")
+centered = false
+offset = Vector2(-7, 0)
+
+[node name="CharacterSprite" type="Sprite2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="DamageEmiter" parent="." instance=ExtResource("3_7oexw")]
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape2D" parent="DamageEmiter" index="0"]
+shape = SubResource("RectangleShape2D_0hjmp")
+
+[editable path="DamageEmiter"]

@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://dn2c8knavguqt"]
+
+[node name="DamageEmiter" type="Area2D"]
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
