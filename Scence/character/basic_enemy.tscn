@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://soipbbb4tt4t"]
+[gd_scene load_steps=14 format=3 uid="uid://soipbbb4tt4t"]
 
 [ext_resource type="PackedScene" uid="uid://bbaq0kx2t163y" path="res://Scence/character/character.tscn" id="1_fuapy"]
 [ext_resource type="Texture2D" uid="uid://ktt73a8jrwh5" path="res://assets/assets/art/characters/enemy_punk.png" id="2_75yv2"]
@@ -6,25 +6,7 @@
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_pdwaq"]
 radius = 2.0
-height = 12.0
-
-[sub_resource type="Animation" id="Animation_75yv2"]
-resource_name = "idle"
-length = 0.1
-loop_mode = 1
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("CharacterSprite:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
-}
+height = 15.0
 
 [sub_resource type="Animation" id="Animation_pdwaq"]
 length = 0.001
@@ -39,24 +21,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [0]
-}
-
-[sub_resource type="Animation" id="Animation_7irl2"]
-resource_name = "walk"
-length = 0.7
-loop_mode = 1
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("CharacterSprite:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [10, 11, 12, 13, 14, 15, 16]
 }
 
 [sub_resource type="Animation" id="Animation_biayr"]
@@ -90,16 +54,123 @@ tracks/1/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_75yv2"]
+resource_name = "idle"
+length = 0.1
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_7irl2"]
+resource_name = "walk"
+length = 0.7
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [10, 11, 12, 13, 14, 15, 16]
+}
+
+[sub_resource type="Animation" id="Animation_ddkqb"]
+resource_name = "fall"
+length = 0.1
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.0739191),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [51]
+}
+
+[sub_resource type="Animation" id="Animation_vshjd"]
+resource_name = "ground"
+length = 0.1
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [52]
+}
+
+[sub_resource type="Animation" id="Animation_43t88"]
+resource_name = "land"
+length = 0.1
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [70]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"on_action_complete"
+}]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_7irl2"]
 _data = {
 &"RESET": SubResource("Animation_pdwaq"),
+&"fall": SubResource("Animation_ddkqb"),
+&"ground": SubResource("Animation_vshjd"),
 &"hurt": SubResource("Animation_biayr"),
 &"idle": SubResource("Animation_75yv2"),
+&"land": SubResource("Animation_43t88"),
 &"walk": SubResource("Animation_7irl2")
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pdwaq"]
-size = Vector2(10, 10)
+size = Vector2(12, 24)
 
 [node name="BasicEnemy" instance=ExtResource("1_fuapy")]
 collision_layer = 4
@@ -108,36 +179,36 @@ script = ExtResource("2_pdwaq")
 health = 20
 speed = 15.0
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="." index="0"]
-rotation = 1.5708
-shape = SubResource("CapsuleShape2D_pdwaq")
-
-[node name="CharacterSprite" parent="." index="2"]
+[node name="CharacterSprite" parent="." index="1"]
 texture = ExtResource("2_75yv2")
 centered = false
 offset = Vector2(-24, -48)
 hframes = 10
 vframes = 10
 
-[node name="AnimationPlayer" parent="." index="4"]
+[node name="CollisionShape2D" parent="." index="2"]
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_pdwaq")
+
+[node name="AnimationPlayer" parent="." index="3"]
 libraries = {
 &"": SubResource("AnimationLibrary_7irl2")
 }
 autoplay = "idle"
 
-[node name="DamageEmiter" parent="." index="5"]
+[node name="DamageEmiter" parent="." index="4"]
 position = Vector2(0, -12)
 
 [node name="CollisionShape2D" parent="DamageEmiter" index="0"]
 position = Vector2(6.5, 1)
 debug_color = Color(0.917419, 0.227041, 0.44687, 0.42)
 
-[node name="DamageReceiver" parent="." index="6"]
+[node name="DamageReceiver" parent="." index="5"]
 collision_layer = 32
 monitorable = true
 
 [node name="CollisionShape2D" parent="DamageReceiver" index="0"]
-position = Vector2(1, -21)
+position = Vector2(0, -16)
 shape = SubResource("RectangleShape2D_pdwaq")
 debug_color = Color(0, 0.215686, 0.701961, 0.419608)
 

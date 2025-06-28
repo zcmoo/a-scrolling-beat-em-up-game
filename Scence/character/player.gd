@@ -1,7 +1,8 @@
 class_name Player
 extends Character
+@onready var enemy_slots : Array = $EnemySlots.get_children()
 
-# 处理键盘输入
+# 处理键盘玩家键盘输入并根据键盘输入切换状态
 func handle_input() -> void:
 	var direction = Input.get_vector("ui_left","ui_right","ui_up","ui_down")
 	velocity = direction * speed
@@ -11,3 +12,20 @@ func handle_input() -> void:
 		state = State.TAKE_OFF
 	if can_jump_kick() and Input.is_action_just_pressed("attack"):
 		state = State.JUMPKICK
+# 给离给定位置最近的敌人占一个位置并返回这个位置
+func reserve_slot(enemy: BaiscEnemy) -> EnemySlot:
+	var available_slots = enemy_slots.filter(func(slot: EnemySlot): return slot.is_free())
+	if available_slots.size() == 0:
+		return null
+	available_slots.sort_custom(func(a: EnemySlot, b: EnemySlot):
+		var dist_a = (enemy.global_position - a.global_position).length()
+		var dist_b = (enemy.global_position - b.global_position).length()
+		return dist_a < dist_b)
+	var closest_slot = available_slots[0]
+	closest_slot.occupy(enemy)  
+	return closest_slot
+# 找到并释放被指定敌人占用的位置（敌人已死亡）
+func free_slot(enemy: BaiscEnemy) -> void:
+	var target_slots = enemy_slots.filter(func(slot: EnemySlot): return slot.occupant == enemy)
+	if target_slots.size() == 1:
+		target_slots[0].free_up()

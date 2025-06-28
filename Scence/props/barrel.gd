@@ -18,7 +18,7 @@ func _process(delta: float) -> void:
 	sprite.position = Vector2.UP * height
 	handle_air_time(delta)
 # 油桶对象接收子节点伤害接受器传来的信号后将要执行的回调函数，该函数会初始化油箱初始高度速度和水平速度
-func on_receive_damage(_damage: int, direction: Vector2) -> void:
+func on_receive_damage(damage: int, direction: Vector2, hi_type: DamageReceiver.HIType) -> void:
 	if state == State.IDLE:
 		sprite.frame = 1
 		height_speed = knockback_intensity * 2

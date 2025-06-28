@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://soipbbb4tt4t" path="res://Scence/character/basic_enemy.tscn" id="5_036b0"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tlwt5"]
-size = Vector2(6, 64)
+size = Vector2(6, 65)
 
 [node name="world" type="Node2D"]
 script = ExtResource("1_tlwt5")
@@ -31,6 +31,7 @@ shape = SubResource("RectangleShape2D_tlwt5")
 position = Vector2(100, 32)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Camera2D/InvisibleWalls/Rightwall"]
+position = Vector2(0, 0.5)
 shape = SubResource("RectangleShape2D_tlwt5")
 
 [node name="ActorContainer" type="Node2D" parent="."]
@@ -38,23 +39,65 @@ y_sort_enabled = true
 
 [node name="player" parent="ActorContainer" instance=ExtResource("2_fj7yv")]
 unique_name_in_owner = true
-position = Vector2(56, 49)
+position = Vector2(59, 49)
 collision_layer = 2
+damage = 20
 
 [node name="Barrel" parent="ActorContainer" instance=ExtResource("2_aqk2v")]
-position = Vector2(34, 62)
+position = Vector2(34, 53)
 
 [node name="BasicEnemy" parent="ActorContainer" node_paths=PackedStringArray("player") instance=ExtResource("5_036b0")]
-position = Vector2(13, 48)
+position = Vector2(11, 50)
 player = NodePath("../player")
+health = 30
+knockdown_intensity = 150.0
 knockback_intensity = 50.0
+duration_ground = 1000.0
 
 [node name="BasicEnemy2" parent="ActorContainer" node_paths=PackedStringArray("player") instance=ExtResource("5_036b0")]
-position = Vector2(83, 48)
+position = Vector2(48, 38)
 player = NodePath("../player")
+health = 30
+knockdown_intensity = 150.0
 knockback_intensity = 50.0
+duration_ground = 1000.0
 
 [node name="BasicEnemy3" parent="ActorContainer" node_paths=PackedStringArray("player") instance=ExtResource("5_036b0")]
-position = Vector2(43, 34)
+position = Vector2(44, 60)
 player = NodePath("../player")
+health = 30
+knockdown_intensity = 150.0
 knockback_intensity = 50.0
+duration_ground = 1000.0
+
+[node name="BasicEnemy4" parent="ActorContainer" node_paths=PackedStringArray("player") instance=ExtResource("5_036b0")]
+position = Vector2(83, 51)
+player = NodePath("../player")
+health = 30
+knockdown_intensity = 150.0
+knockback_intensity = 50.0
+duration_ground = 1000.0
+
+[node name="BasicEnemy5" parent="ActorContainer" node_paths=PackedStringArray("player") instance=ExtResource("5_036b0")]
+position = Vector2(70, 60)
+player = NodePath("../player")
+health = 30
+knockdown_intensity = 150.0
+knockback_intensity = 50.0
+duration_ground = 1000.0
+
+[editable path="ActorContainer/BasicEnemy"]
+[editable path="ActorContainer/BasicEnemy/DamageEmiter"]
+[editable path="ActorContainer/BasicEnemy/DamageReceiver"]
+[editable path="ActorContainer/BasicEnemy2"]
+[editable path="ActorContainer/BasicEnemy2/DamageEmiter"]
+[editable path="ActorContainer/BasicEnemy2/DamageReceiver"]
+[editable path="ActorContainer/BasicEnemy3"]
+[editable path="ActorContainer/BasicEnemy3/DamageEmiter"]
+[editable path="ActorContainer/BasicEnemy3/DamageReceiver"]
+[editable path="ActorContainer/BasicEnemy4"]
+[editable path="ActorContainer/BasicEnemy4/DamageEmiter"]
+[editable path="ActorContainer/BasicEnemy4/DamageReceiver"]
+[editable path="ActorContainer/BasicEnemy5"]
+[editable path="ActorContainer/BasicEnemy5/DamageEmiter"]
+[editable path="ActorContainer/BasicEnemy5/DamageReceiver"]

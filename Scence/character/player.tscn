@@ -1,8 +1,9 @@
-[gd_scene load_steps=15 format=3 uid="uid://d00gae1hbcdkv"]
+[gd_scene load_steps=16 format=3 uid="uid://d00gae1hbcdkv"]
 
 [ext_resource type="PackedScene" uid="uid://bbaq0kx2t163y" path="res://Scence/character/character.tscn" id="1_xq4wj"]
 [ext_resource type="Texture2D" uid="uid://d2t8fchk4vm02" path="res://assets/assets/art/characters/player.png" id="2_dyfjb"]
 [ext_resource type="Script" uid="uid://bmm2h3dd7m4yq" path="res://Scence/character/player.gd" id="2_x4tp7"]
+[ext_resource type="PackedScene" uid="uid://c70yotu6d7hbk" path="res://Scence/character/enemy_slot.tscn" id="4_k61ru"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_x4tp7"]
 radius = 2.0
@@ -53,98 +54,6 @@ tracks/0/keys = {
 "values": [0, 1, 2, 3]
 }
 
-[sub_resource type="Animation" id="Animation_61j3e"]
-resource_name = "punch"
-length = 0.15
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("CharacterSprite:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.1),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [21, 22, 23]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0.15),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"on_action_complete"
-}]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("DamageEmiter:monitoring")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.15),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
-}
-
-[sub_resource type="Animation" id="Animation_k61ru"]
-resource_name = "walk"
-length = 0.7
-loop_mode = 1
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("CharacterSprite:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [11, 12, 13, 14, 15, 16, 17]
-}
-
-[sub_resource type="Animation" id="Animation_8tbf0"]
-resource_name = "take_off"
-length = 0.05
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("CharacterSprite:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [61]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0.05),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"on_take_off_complete"
-}]
-}
-
 [sub_resource type="Animation" id="Animation_j0vcv"]
 resource_name = "jump"
 length = 0.1
@@ -161,6 +70,35 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [62]
+}
+
+[sub_resource type="Animation" id="Animation_ukylx"]
+resource_name = "jump_kick"
+length = 0.1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [63]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("DamageEmiter:monitoring")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_oyejr"]
@@ -206,10 +144,53 @@ tracks/2/keys = {
 "values": [false]
 }
 
-[sub_resource type="Animation" id="Animation_ukylx"]
-resource_name = "jump_kick"
-length = 0.1
-step = 0.1
+[sub_resource type="Animation" id="Animation_61j3e"]
+resource_name = "punch"
+length = 0.15
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [21, 22, 23]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.15),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"on_action_complete"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("DamageEmiter:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_8tbf0"]
+resource_name = "take_off"
+length = 0.05
+step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -220,19 +201,39 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [63]
+"values": [61]
 }
-tracks/1/type = "value"
+tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("DamageEmiter:monitoring")
+tracks/1/path = NodePath(".")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0),
+"times": PackedFloat32Array(0.05),
 "transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"on_take_off_complete"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_k61ru"]
+resource_name = "walk"
+length = 0.7
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [true]
+"values": [11, 12, 13, 14, 15, 16, 17]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_k61ru"]
@@ -290,6 +291,20 @@ monitorable = true
 position = Vector2(1, -20)
 shape = SubResource("RectangleShape2D_x4tp7")
 debug_color = Color(0.615337, 0.519623, 0.379195, 0.42)
+
+[node name="EnemySlots" type="Node2D" parent="." index="6"]
+
+[node name="EnemySlot" parent="EnemySlots" index="0" instance=ExtResource("4_k61ru")]
+position = Vector2(11, -6)
+
+[node name="EnemySlot2" parent="EnemySlots" index="1" instance=ExtResource("4_k61ru")]
+position = Vector2(11, 3)
+
+[node name="EnemySlot3" parent="EnemySlots" index="2" instance=ExtResource("4_k61ru")]
+position = Vector2(-12, -7)
+
+[node name="EnemySlot4" parent="EnemySlots" index="3" instance=ExtResource("4_k61ru")]
+position = Vector2(-10, 2)
 
 [editable path="DamageEmiter"]
 [editable path="DamageReceiver"]
