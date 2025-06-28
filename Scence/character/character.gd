@@ -8,21 +8,20 @@ extends CharacterBody2D
 enum State {IDLE, WALK, ATTACK}
 var state = State.IDLE
 
-
+# 节点生成后绑定当伤害发送器与伤害接受器碰撞时的回调函数，并将伤害接受器的对象作为参数传递给改回调函数
 func _ready() -> void:
 	damage_emiter.area_entered.connect(on_emit_damage.bind())
-
-func on_emit_damage(damager_receiver: DamageReceiver) -> void:
-	var direction = Vector2.LEFT if damager_receiver.global_position.x < global_position.x else Vector2.RIGHT
-	damager_receiver.damage_receive.emit(damage, direction)
-	print(damager_receiver)
-# 画面更新中
+# 游戏主循环中处理人物更新
 func _process(_delta: float) -> void:
 	handle_input()
 	handle_movement()
 	handle_animation()
 	flip_sprite()
 	move_and_slide()
+# 当伤害发送器与伤害接受器碰撞时的回调函数，该函数会根据油桶的位置和角色位置判断油桶飞出的方向，并把信号发送给传递过来的伤害接收器
+func on_emit_damage(damager_receiver: DamageReceiver) -> void:
+	var direction = Vector2.LEFT if damager_receiver.global_position.x < global_position.x else Vector2.RIGHT
+	damager_receiver.damage_receive.emit(damage, direction)
 # 处理移动状态
 func handle_movement() -> void:
 	if can_move():
@@ -60,6 +59,6 @@ func can_attack() -> bool:
 # 检查是否处于可移动状态
 func can_move() -> bool:
 	return state == State.IDLE or state == State.WALK
-# 
+# 当动画播放完后的回调函数
 func on_action_complete() -> void:
 	state = State.IDLE
