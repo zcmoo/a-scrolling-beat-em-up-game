@@ -36,5 +36,8 @@ shape = SubResource("RectangleShape2D_0hjmp")
 [node name="DamageReceiver" parent="." instance=ExtResource("4_0hjmp")]
 monitorable = false
 
+[node name="collateralDamageEmiter" parent="." instance=ExtResource("3_7oexw")]
+
 [editable path="DamageEmiter"]
 [editable path="DamageReceiver"]
+[editable path="collateralDamageEmiter"]

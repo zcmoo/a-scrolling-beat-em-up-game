@@ -1,5 +1,6 @@
 class_name Character
 extends CharacterBody2D
+@export var can_respawn : bool
 @export var health : int
 @export var damage : int
 @export var speed : float
@@ -7,20 +8,26 @@ extends CharacterBody2D
 @export var knockback_intensity : float
 @export var jump_intensity : float
 @export var duration_ground : float
-# 需要被继承时必须用$引用其它节点，不能用%
+@export var damage_power : int
+@export var flight_speed : float
+# 需要被其它子场景继承并调用自己的子节点时必须用$引用其它节点，不能用%
 @onready var animation_player : AnimationPlayer = $AnimationPlayer
 @onready var character_sprite : Sprite2D = $CharacterSprite
 @onready var damage_emiter : Area2D = $DamageEmiter
 @onready var damage_receciver : DamageReceiver = $DamageReceiver
-@onready var collision_shape = $CollisionShape2D
-enum State {IDLE, WALK, ATTACK, TAKE_OFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUND}
+@onready var collision_shape : CollisionShape2D = $CollisionShape2D
+@onready var collater_damage_emiter : Area2D = $collateralDamageEmiter
+enum State {IDLE, WALK, ATTACK, TAKE_OFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUND, DEATH, FLY}
 const GRAVITY = 500
 var state = State.IDLE
 var height = 0.0
 var height_speed = 0.0 
 var current_health = 0
+var is_last_hit_successful = false
+var heading = Vector2.RIGHT
+var attack_combo_index = 0
 var time_since_ground = Time.get_ticks_msec() 
-
+var anim_attack = ["punch", "punch_alt", "kick", "round_kick"]
 # 定义播放动画的字典
 var animation_map : Dictionary = {
 	State.IDLE: "idle",
@@ -33,11 +40,16 @@ var animation_map : Dictionary = {
 	State.HURT: "hurt",
 	State.FALL: "fall",
 	State.GROUND: "ground",
+	State.DEATH: "ground",
+	State.FLY: "fly"
 }
+
 # 节点生成后绑定当伤害发送器与伤害接受器碰撞时的回调函数，并将伤害接受器的对象作为参数传递给改回调函数
 func _ready() -> void:
 	damage_emiter.area_entered.connect(on_emit_damage.bind())
 	damage_receciver.damage_receive.connect(on_rececive_damage.bind())
+	collater_damage_emiter.area_entered.connect(on_emit_collateral_damage.bind())
+	collater_damage_emiter.body_entered.connect(on_wall_hit.bind())
 	current_health = health
 # 游戏主循环中处理人物更新逻辑
 func _process(delta: float) -> void:
@@ -46,17 +58,24 @@ func _process(delta: float) -> void:
 	handle_animation()
 	handle_air_time(delta)
 	hand_ground()
+	handle_death(delta)
+	set_heading()
 	flip_sprite()
 	character_sprite.position = Vector2.UP * height
-	collision_shape.disabled = (state == State.GROUND)
+	collision_shape.disabled = is_collision_disabled()
 	move_and_slide()
 # 当伤害发送器与伤害接受器碰撞时的回调函数，该函数会根据油桶的位置和角色位置判断油桶飞出的方向，并把信号发送给传递过来的伤害接收器
 func on_emit_damage(damager_receiver: DamageReceiver) -> void:
 	var hi_type = DamageReceiver.HIType.NOMAL
 	var direction = Vector2.LEFT if damager_receiver.global_position.x < global_position.x else Vector2.RIGHT
+	var curent_damage = damage
 	if state == State.JUMPKICK:
 		hi_type = DamageReceiver.HIType.KNOCKDOWN
-	damager_receiver.damage_receive.emit(damage, direction, hi_type)
+	if attack_combo_index == anim_attack.size() - 1:
+		hi_type = DamageReceiver.HIType.POWER
+		curent_damage = damage_power
+	damager_receiver.damage_receive.emit(curent_damage, direction, hi_type)
+	is_last_hit_successful = true
 # 处理移动状态
 func handle_movement() -> void:
 	if can_move():
@@ -69,14 +88,16 @@ func handle_input() -> void:
 	pass # override me
 # 处理动画
 func handle_animation() -> void:
-	if animation_player.has_animation(animation_map[state]):
+	if state == State.ATTACK:
+		animation_player.play(anim_attack[attack_combo_index])
+	elif animation_player.has_animation(animation_map[state]):
 		animation_player.play(animation_map[state])
 # 处理朝向
 func flip_sprite() -> void:
-	if velocity.x > 0:
+	if heading == Vector2.RIGHT:
 		character_sprite.flip_h = false
 		damage_emiter.scale.x = 1
-	elif velocity.x < 0:
+	else:
 		character_sprite.flip_h = true
 		damage_emiter.scale.x = -1
 # 检查是否处于可攻击状态
@@ -91,6 +112,9 @@ func can_jump() -> bool:
 # 检查是否处于可飞踢状态
 func can_jump_kick() -> bool:
 	return state == State.JUMP
+# 检查是否处于可攻击状态
+func can_get_hurt() -> bool:
+	return [State.IDLE, State.WALK, State.TAKE_OFF, State.JUMP, State.LAND].has(state)
 # 当动画播放完后的回调函数
 func on_action_complete() -> void:
 	state = State.IDLE
@@ -117,15 +141,45 @@ func handle_air_time(delta: float) -> void:
 			height_speed -= GRAVITY * delta
 # 角色收到攻击后扣血和击退和击飞
 func on_rececive_damage(damage: int, directinon: Vector2, hi_type: DamageReceiver.HIType) -> void:
-	current_health = clamp(current_health - damage, 0, health)
-	if current_health == 0 or hi_type == DamageReceiver.HIType.KNOCKDOWN:
-		state = State.FALL
-		height_speed = knockdown_intensity
-	else:
-		state = State.HURT
-	velocity = directinon * knockback_intensity
+	if can_get_hurt():
+		print(damage)
+		current_health = clamp(current_health - damage, 0, health)
+		if current_health == 0 or hi_type == DamageReceiver.HIType.KNOCKDOWN:
+			state = State.FALL
+			height_speed = knockdown_intensity
+			velocity = directinon * knockback_intensity
+		elif hi_type == DamageReceiver.HIType.POWER:
+			state = State.FLY
+			velocity = directinon * flight_speed
+		else:
+			state = State.HURT
+			velocity = directinon * knockback_intensity
 # 处理敌人角色被击飞通过计时器过渡到着陆状态
 func hand_ground() -> void:
 	if state == State.GROUND and (Time.get_ticks_msec() - time_since_ground > duration_ground):
-		state = State.LAND
-		
+		if current_health <= 0:
+			state = State.DEATH
+		else:
+			state = State.LAND
+# 处理死亡状态
+func handle_death(delta: float) -> void:
+	if state == State.DEATH and not can_respawn:
+		modulate.a -= delta / 2.0
+		if modulate.a <= 0:
+			queue_free()
+ # 判断是否关闭碰撞功能
+func is_collision_disabled() -> bool:
+	return [State.GROUND, State.DEATH, State.FLY].has(state)
+# 处理敌人撞墙发弹功能
+func on_wall_hit(wall: AnimatableBody2D) -> void:
+	state = State.FALL
+	height_speed = knockdown_intensity
+	velocity = -velocity / 2.0
+# 处理敌人被连招击飞后与其它敌人相撞后的动作
+func on_emit_collateral_damage(reciever: DamageReceiver) -> void:
+	if reciever != damage_receciver:
+		var direction = Vector2.LEFT if damage_receciver.global_position.x < global_position.x else Vector2.RIGHT
+		reciever.damage_receive.emit(10, direction, DamageReceiver.HIType.KNOCKDOWN)
+# 处理人物朝向问题
+func set_heading() -> void:
+	pass # override me

@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cilxw70jli3sv"]
+[gd_scene load_steps=8 format=3 uid="uid://cilxw70jli3sv"]
 
 [ext_resource type="PackedScene" uid="uid://xtj44mfkw662" path="res://Scence/stage/stage.tscn" id="1_f3sb7"]
 [ext_resource type="Script" uid="uid://dyb71d2grjfam" path="res://world.gd" id="1_tlwt5"]
@@ -6,8 +6,11 @@
 [ext_resource type="PackedScene" uid="uid://d00gae1hbcdkv" path="res://Scence/character/player.tscn" id="2_fj7yv"]
 [ext_resource type="PackedScene" uid="uid://soipbbb4tt4t" path="res://Scence/character/basic_enemy.tscn" id="5_036b0"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_tlwt5"]
-size = Vector2(6, 65)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_036b0"]
+size = Vector2(8, 72)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dwbse"]
+size = Vector2(7, 73)
 
 [node name="world" type="Node2D"]
 script = ExtResource("1_tlwt5")
@@ -21,18 +24,24 @@ position = Vector2(50, 32)
 [node name="InvisibleWalls" type="Node2D" parent="Camera2D"]
 position = Vector2(-50, -32)
 
-[node name="Leftwall" type="StaticBody2D" parent="Camera2D/InvisibleWalls"]
-position = Vector2(0, 32)
+[node name="Leftwall" type="AnimatableBody2D" parent="Camera2D/InvisibleWalls"]
+position = Vector2(0, 33)
+collision_layer = 128
+collision_mask = 0
+sync_to_physics = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Camera2D/InvisibleWalls/Leftwall"]
-shape = SubResource("RectangleShape2D_tlwt5")
+shape = SubResource("RectangleShape2D_036b0")
 
-[node name="Rightwall" type="StaticBody2D" parent="Camera2D/InvisibleWalls"]
-position = Vector2(100, 32)
+[node name="Rightwall" type="AnimatableBody2D" parent="Camera2D/InvisibleWalls"]
+position = Vector2(100, 35)
+collision_layer = 128
+collision_mask = 0
+sync_to_physics = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Camera2D/InvisibleWalls/Rightwall"]
-position = Vector2(0, 0.5)
-shape = SubResource("RectangleShape2D_tlwt5")
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_dwbse")
 
 [node name="ActorContainer" type="Node2D" parent="."]
 y_sort_enabled = true
@@ -40,64 +49,84 @@ y_sort_enabled = true
 [node name="player" parent="ActorContainer" instance=ExtResource("2_fj7yv")]
 unique_name_in_owner = true
 position = Vector2(59, 49)
-collision_layer = 2
-damage = 20
+can_respawn = true
+damage_power = 20
 
 [node name="Barrel" parent="ActorContainer" instance=ExtResource("2_aqk2v")]
 position = Vector2(34, 53)
 
 [node name="BasicEnemy" parent="ActorContainer" node_paths=PackedStringArray("player") instance=ExtResource("5_036b0")]
 position = Vector2(11, 50)
+collision_mask = 9
 player = NodePath("../player")
-health = 30
+health = 200
+speed = 50.0
 knockdown_intensity = 150.0
 knockback_intensity = 50.0
 duration_ground = 1000.0
+flight_speed = 100.0
 
 [node name="BasicEnemy2" parent="ActorContainer" node_paths=PackedStringArray("player") instance=ExtResource("5_036b0")]
-position = Vector2(48, 38)
+position = Vector2(78, 50)
+collision_mask = 9
 player = NodePath("../player")
-health = 30
+health = 200
+speed = 50.0
 knockdown_intensity = 150.0
 knockback_intensity = 50.0
 duration_ground = 1000.0
+flight_speed = 100.0
 
 [node name="BasicEnemy3" parent="ActorContainer" node_paths=PackedStringArray("player") instance=ExtResource("5_036b0")]
-position = Vector2(44, 60)
+position = Vector2(46, 59)
+collision_mask = 9
 player = NodePath("../player")
-health = 30
+health = 200
+speed = 50.0
 knockdown_intensity = 150.0
 knockback_intensity = 50.0
 duration_ground = 1000.0
+flight_speed = 100.0
 
 [node name="BasicEnemy4" parent="ActorContainer" node_paths=PackedStringArray("player") instance=ExtResource("5_036b0")]
-position = Vector2(83, 51)
+position = Vector2(74, 60)
+collision_mask = 9
 player = NodePath("../player")
-health = 30
+health = 200
+speed = 50.0
 knockdown_intensity = 150.0
 knockback_intensity = 50.0
 duration_ground = 1000.0
+flight_speed = 100.0
 
 [node name="BasicEnemy5" parent="ActorContainer" node_paths=PackedStringArray("player") instance=ExtResource("5_036b0")]
-position = Vector2(70, 60)
+position = Vector2(45, 36)
+collision_mask = 9
 player = NodePath("../player")
-health = 30
+health = 200
+speed = 50.0
 knockdown_intensity = 150.0
 knockback_intensity = 50.0
 duration_ground = 1000.0
+flight_speed = 100.0
 
 [editable path="ActorContainer/BasicEnemy"]
 [editable path="ActorContainer/BasicEnemy/DamageEmiter"]
 [editable path="ActorContainer/BasicEnemy/DamageReceiver"]
+[editable path="ActorContainer/BasicEnemy/collateralDamageEmiter"]
 [editable path="ActorContainer/BasicEnemy2"]
 [editable path="ActorContainer/BasicEnemy2/DamageEmiter"]
 [editable path="ActorContainer/BasicEnemy2/DamageReceiver"]
+[editable path="ActorContainer/BasicEnemy2/collateralDamageEmiter"]
 [editable path="ActorContainer/BasicEnemy3"]
 [editable path="ActorContainer/BasicEnemy3/DamageEmiter"]
 [editable path="ActorContainer/BasicEnemy3/DamageReceiver"]
+[editable path="ActorContainer/BasicEnemy3/collateralDamageEmiter"]
 [editable path="ActorContainer/BasicEnemy4"]
 [editable path="ActorContainer/BasicEnemy4/DamageEmiter"]
 [editable path="ActorContainer/BasicEnemy4/DamageReceiver"]
+[editable path="ActorContainer/BasicEnemy4/collateralDamageEmiter"]
 [editable path="ActorContainer/BasicEnemy5"]
 [editable path="ActorContainer/BasicEnemy5/DamageEmiter"]
 [editable path="ActorContainer/BasicEnemy5/DamageReceiver"]
+[editable path="ActorContainer/BasicEnemy5/collateralDamageEmiter"]

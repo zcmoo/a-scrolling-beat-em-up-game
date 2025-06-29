@@ -8,6 +8,11 @@ func handle_input() -> void:
 	velocity = direction * speed
 	if can_attack() and Input.is_action_just_pressed("attack"):
 		state = State.ATTACK
+		if is_last_hit_successful:
+			attack_combo_index = (attack_combo_index + 1) % anim_attack.size()
+			is_last_hit_successful = false
+		else:
+			attack_combo_index = 0
 	if can_jump() and Input.is_action_just_pressed("jump"):
 		state = State.TAKE_OFF
 	if can_jump_kick() and Input.is_action_just_pressed("attack"):
@@ -23,9 +28,16 @@ func reserve_slot(enemy: BaiscEnemy) -> EnemySlot:
 		return dist_a < dist_b)
 	var closest_slot = available_slots[0]
 	closest_slot.occupy(enemy)  
+	enemy.has_slot = true
 	return closest_slot
 # 找到并释放被指定敌人占用的位置（敌人已死亡）
 func free_slot(enemy: BaiscEnemy) -> void:
 	var target_slots = enemy_slots.filter(func(slot: EnemySlot): return slot.occupant == enemy)
 	if target_slots.size() == 1:
 		target_slots[0].free_up()
+# 设置玩家的朝向
+func set_heading() -> void:
+	if velocity.x > 0:
+		heading = Vector2.RIGHT
+	if velocity.x < 0:
+		heading = Vector2.LEFT
