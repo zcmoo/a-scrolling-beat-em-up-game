@@ -38,6 +38,20 @@ monitorable = false
 
 [node name="collateralDamageEmiter" parent="." instance=ExtResource("3_7oexw")]
 
+[node name="KnifeSprite" type="Sprite2D" parent="."]
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+target_position = Vector2(100, 0)
+collision_mask = 0
+
+[node name="CollectibleSensor" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollectibleSensor"]
+
 [editable path="DamageEmiter"]
 [editable path="DamageReceiver"]
 [editable path="collateralDamageEmiter"]

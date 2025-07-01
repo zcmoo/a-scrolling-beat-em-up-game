@@ -2,17 +2,26 @@ class_name Player
 extends Character
 @onready var enemy_slots : Array = $EnemySlots.get_children()
 
+func _ready() -> void:
+	super._ready()
+	anim_attack = ["punch", "punch_alt", "kick", "round_kick"]
 # 处理键盘玩家键盘输入并根据键盘输入切换状态
 func handle_input() -> void:
 	var direction = Input.get_vector("ui_left","ui_right","ui_up","ui_down")
 	velocity = direction * speed
 	if can_attack() and Input.is_action_just_pressed("attack"):
-		state = State.ATTACK
-		if is_last_hit_successful:
-			attack_combo_index = (attack_combo_index + 1) % anim_attack.size()
-			is_last_hit_successful = false
+		if has_knife:
+			state = State.THROW
 		else:
-			attack_combo_index = 0
+			if can_pick_up():
+				state = State.PICK_UP
+			else:
+				state = State.ATTACK
+				if is_last_hit_successful:
+					attack_combo_index = (attack_combo_index + 1) % anim_attack.size()
+					is_last_hit_successful = false
+				else:
+					attack_combo_index = 0
 	if can_jump() and Input.is_action_just_pressed("jump"):
 		state = State.TAKE_OFF
 	if can_jump_kick() and Input.is_action_just_pressed("attack"):

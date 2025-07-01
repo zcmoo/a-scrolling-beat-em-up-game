@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://c2u86ydcdpj7p"]
+
+[ext_resource type="Script" uid="uid://c6rgwcs13ocqn" path="res://Scence/props/collectible.gd" id="1_vers4"]
+[ext_resource type="PackedScene" uid="uid://dn2c8knavguqt" path="res://Scence/colliders/damage_emiter.tscn" id="2_4weut"]
+
+[node name="collectible" type="Area2D"]
+collision_layer = 256
+collision_mask = 6
+monitoring = false
+monitorable = false
+script = ExtResource("1_vers4")
+speed = 100.0
+knockdown_intensity = 120.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+[node name="CollectSprite" type="Sprite2D" parent="."]
+
+[node name="ShadowSprite" type="Sprite2D" parent="."]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="DamageEmiter" parent="." instance=ExtResource("2_4weut")]
+collision_layer = 0
+collision_mask = 0

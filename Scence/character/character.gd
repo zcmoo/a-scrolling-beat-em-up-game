@@ -1,5 +1,8 @@
 class_name Character
 extends CharacterBody2D
+@export var can_resqawn_knives : bool
+@export var duration_between_knife_resqawn : int
+@export var has_knife : bool
 @export var can_respawn : bool
 @export var health : int
 @export var damage : int
@@ -17,7 +20,10 @@ extends CharacterBody2D
 @onready var damage_receciver : DamageReceiver = $DamageReceiver
 @onready var collision_shape : CollisionShape2D = $CollisionShape2D
 @onready var collater_damage_emiter : Area2D = $collateralDamageEmiter
-enum State {IDLE, WALK, ATTACK, TAKE_OFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUND, DEATH, FLY}
+@onready var knife_sprite : Sprite2D = $KnifeSprite
+@onready var raycast : RayCast2D = $RayCast2D
+@onready var collectible_sensor : Area2D = $CollectibleSensor
+enum State {IDLE, WALK, ATTACK, TAKE_OFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUND, DEATH, FLY, PREP_ATTACK, THROW, PICK_UP}
 const GRAVITY = 500
 var state = State.IDLE
 var height = 0.0
@@ -27,7 +33,9 @@ var is_last_hit_successful = false
 var heading = Vector2.RIGHT
 var attack_combo_index = 0
 var time_since_ground = Time.get_ticks_msec() 
-var anim_attack = ["punch", "punch_alt", "kick", "round_kick"]
+var time_since_knife_dismiss = Time.get_ticks_msec()
+var anim_attack = []
+
 # 定义播放动画的字典
 var animation_map : Dictionary = {
 	State.IDLE: "idle",
@@ -41,7 +49,10 @@ var animation_map : Dictionary = {
 	State.FALL: "fall",
 	State.GROUND: "ground",
 	State.DEATH: "ground",
-	State.FLY: "fly"
+	State.FLY: "fly",
+	State.PREP_ATTACK : "idle",
+	State.THROW : "throw",
+	State.PICK_UP : "pick_up"
 }
 
 # 节点生成后绑定当伤害发送器与伤害接受器碰撞时的回调函数，并将伤害接受器的对象作为参数传递给改回调函数
@@ -55,13 +66,17 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	handle_input()
 	handle_movement()
+	handle_knife_resqwan()
 	handle_animation()
 	handle_air_time(delta)
+	handle_prep_attack()
 	hand_ground()
 	handle_death(delta)
 	set_heading()
+	knife_sprite.visible = has_knife
 	flip_sprite()
 	character_sprite.position = Vector2.UP * height
+	knife_sprite.position = Vector2.UP * height
 	collision_shape.disabled = is_collision_disabled()
 	move_and_slide()
 # 当伤害发送器与伤害接受器碰撞时的回调函数，该函数会根据油桶的位置和角色位置判断油桶飞出的方向，并把信号发送给传递过来的伤害接收器
@@ -96,9 +111,13 @@ func handle_animation() -> void:
 func flip_sprite() -> void:
 	if heading == Vector2.RIGHT:
 		character_sprite.flip_h = false
+		knife_sprite.flip_h = false
+		raycast.scale.x = 1
 		damage_emiter.scale.x = 1
 	else:
 		character_sprite.flip_h = true
+		knife_sprite.flip_h = true
+		raycast.scale.x = -1
 		damage_emiter.scale.x = -1
 # 检查是否处于可攻击状态
 func can_attack() -> bool:
@@ -114,7 +133,7 @@ func can_jump_kick() -> bool:
 	return state == State.JUMP
 # 检查是否处于可攻击状态
 func can_get_hurt() -> bool:
-	return [State.IDLE, State.WALK, State.TAKE_OFF, State.JUMP, State.LAND].has(state)
+	return [State.IDLE, State.WALK, State.TAKE_OFF, State.LAND, State.ATTACK].has(state)
 # 当动画播放完后的回调函数
 func on_action_complete() -> void:
 	state = State.IDLE
@@ -142,7 +161,10 @@ func handle_air_time(delta: float) -> void:
 # 角色收到攻击后扣血和击退和击飞
 func on_rececive_damage(damage: int, directinon: Vector2, hi_type: DamageReceiver.HIType) -> void:
 	if can_get_hurt():
-		print(damage)
+		can_resqawn_knives = false
+		if has_knife:
+			has_knife = false
+			time_since_knife_dismiss = Time.get_ticks_msec()
 		current_health = clamp(current_health - damage, 0, health)
 		if current_health == 0 or hi_type == DamageReceiver.HIType.KNOCKDOWN:
 			state = State.FALL
@@ -183,3 +205,36 @@ func on_emit_collateral_damage(reciever: DamageReceiver) -> void:
 # 处理人物朝向问题
 func set_heading() -> void:
 	pass # override me
+
+func handle_prep_attack() -> void:
+	pass
+
+func on_throw_complete() -> void:
+	state = State.IDLE
+	has_knife = false
+
+func handle_knife_resqwan() -> void:
+	if can_resqawn_knives and not has_knife and (Time.get_ticks_msec() - time_since_knife_dismiss > duration_between_knife_resqawn):
+		has_knife = true	
+
+func on_pick_up_complete() -> void:
+	state = State.IDLE
+	pickup_collectible()
+
+func can_pick_up() -> bool:
+	var collectible_area = collectible_sensor.get_overlapping_areas()
+	if collectible_area.size() == 0:
+		return false
+	var collectible : COllectible = collectible_area[0]
+	if collectible.type == COllectible.Type.KNIFE and not has_knife:
+		return true
+	return false
+
+func pickup_collectible() -> void:
+	if can_pick_up():
+		var collectible_area = collectible_sensor.get_overlapping_areas() 
+		var collectible : COllectible = collectible_area[0]
+		if collectible.type == COllectible.Type.KNIFE and not has_knife:
+			has_knife = true
+		collectible.queue_free()
+	
