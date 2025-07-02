@@ -75,6 +75,8 @@ func _process(delta: float) -> void:
 	handle_death(delta)
 	set_heading()
 	knife_sprite.visible = has_knife
+	damage_emiter.monitoring = is_attacking()
+	damage_receciver.monitorable = can_get_hurt()
 	flip_sprite()
 	character_sprite.position = Vector2.UP * height
 	knife_sprite.position = Vector2.UP * height
@@ -110,6 +112,8 @@ func handle_animation() -> void:
 		animation_player.play(animation_map[state])
 # 处理朝向
 func flip_sprite() -> void:
+	if not can_move():
+		return
 	if heading == Vector2.RIGHT:
 		character_sprite.flip_h = false
 		knife_sprite.scale.x = 1
@@ -123,6 +127,9 @@ func flip_sprite() -> void:
 # 检查是否处于可攻击状态
 func can_attack() -> bool:
 	return state == State.IDLE or state == State.WALK
+# 检查是否是攻击（敌人）的状态
+func  is_attacking() -> bool:
+	return [State.ATTACK, State.JUMPKICK].has(state)
 # 检查是否处于可移动状态
 func can_move() -> bool:
 	return state == State.IDLE or state == State.WALK
@@ -134,7 +141,7 @@ func can_jump_kick() -> bool:
 	return state == State.JUMP
 # 检查是否处于可攻击状态
 func can_get_hurt() -> bool:
-	return [State.IDLE, State.WALK, State.TAKE_OFF, State.LAND, State.ATTACK].has(state)
+	return [State.IDLE, State.WALK, State.TAKE_OFF, State.LAND, State.ATTACK, State.PREP_ATTACK].has(state)
 # 当动画播放完后的回调函数
 func on_action_complete() -> void:
 	state = State.IDLE
@@ -162,6 +169,7 @@ func handle_air_time(delta: float) -> void:
 # 角色收到攻击后扣血和击退和击飞
 func on_rececive_damage(damage: int, directinon: Vector2, hi_type: DamageReceiver.HIType) -> void:
 	if can_get_hurt():
+		heading = -directinon
 		can_resqawn_knives = false
 		if has_knife:
 			has_knife = false
@@ -177,7 +185,7 @@ func on_rececive_damage(damage: int, directinon: Vector2, hi_type: DamageReceive
 		else:
 			state = State.HURT
 			velocity = directinon * knockback_intensity
-# 处理敌人角色被击飞通过计时器过渡到着陆状态
+# 处理角色被击飞通过计时器过渡到着陆状态
 func hand_ground() -> void:
 	if state == State.GROUND and (Time.get_ticks_msec() - time_since_ground > duration_ground):
 		if current_health <= 0:
@@ -213,7 +221,9 @@ func handle_prep_attack() -> void:
 func on_throw_complete() -> void:
 	state = State.IDLE
 	has_knife = false
-	EntityManager.sqawn_collectible.emit(COllectible.Type.KNIFE, COllectible.State.FLY, weapon_postion.global_position, heading)
+	var knife_global_postion = Vector2(weapon_postion.global_position.x, global_position.y)
+	var knife_height = -weapon_postion.position.y
+	EntityManager.sqawn_collectible.emit(COllectible.Type.KNIFE, COllectible.State.FLY, knife_global_postion, heading, knife_height)
 
 func handle_knife_resqwan() -> void:
 	if can_resqawn_knives and not has_knife and (Time.get_ticks_msec() - time_since_knife_dismiss > duration_between_knife_resqawn):

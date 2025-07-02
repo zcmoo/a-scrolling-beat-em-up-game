@@ -4,9 +4,11 @@ enum State {FALL, GROUND, FLY}
 enum Type {KNIFE, GUN, FOOD}
 @export var type : Type
 @export var speed : float
+@export var damage : int
 @export var knockdown_intensity : float
 @onready var animation_player : AnimationPlayer = $AnimationPlayer
 @onready var collectible_sprite : Sprite2D = $CollectSprite
+@onready var damage_emitter : Area2D = $DamageEmiter
 var anim_map ={
 	State.FALL : "fall",
 	State.GROUND : "ground",
@@ -24,6 +26,9 @@ func _ready() -> void:
 	height_speed = knockdown_intensity 
 	if state == State.FLY:
 		velocity = direction * speed
+	damage_emitter.area_entered.connect(on_emit_damage.bind())
+	damage_emitter.body_exited.connect(on_exit_screen.bind())
+	damage_emitter.position = Vector2.UP * height
 
 func _process(delta: float) -> void:
 	collectible_sprite.position = Vector2.UP * height
@@ -44,3 +49,11 @@ func handle_fall(delta: float) -> void:
 func handle_animation() -> void:
 	if animation_player.has_animation(anim_map[state]):
 		animation_player.play(anim_map[state])
+
+func on_emit_damage(reciver: DamageReceiver) -> void:
+	reciver.damage_receive.emit(damage, direction, DamageReceiver.HIType.KNOCKDOWN)
+	queue_free()
+
+func on_exit_screen(_wall: AnimatableBody2D) -> void:
+	queue_free()
+	

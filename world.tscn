@@ -54,44 +54,51 @@ script = ExtResource("4_ioo17")
 
 [node name="player" parent="ActorContainer" instance=ExtResource("2_fj7yv")]
 unique_name_in_owner = true
-position = Vector2(11, 36)
+position = Vector2(60, 47)
 can_respawn = true
-health = 500
+health = 200
+knockdown_intensity = 80.0
+knockback_intensity = 20.0
+duration_ground = 500.0
 damage_power = 20
+flight_speed = 100.0
 
 [node name="Barrel" parent="ActorContainer" instance=ExtResource("2_aqk2v")]
-position = Vector2(34, 53)
+position = Vector2(14, 62)
 
 [node name="BasicEnemy" parent="ActorContainer" node_paths=PackedStringArray("player") instance=ExtResource("5_036b0")]
-position = Vector2(79, 44)
+position = Vector2(17, 40)
 collision_mask = 9
 player = NodePath("../player")
-duration_between_hit = 2000
+duration_between_hit = 200
 duration_prop_hit = 300
-duration_between_range_attack = 400
+duration_between_range_attack = 1000
 duration_prep_range_attack = 500
 duration_between_knife_resqawn = 3000
 health = 200
 damage = 20
-speed = 50.0
+speed = 25.0
 knockdown_intensity = 150.0
 knockback_intensity = 50.0
-duration_ground = 1000.0
+duration_ground = 500.0
 flight_speed = 100.0
 
 [node name="knife" parent="ActorContainer" instance=ExtResource("7_pkg7o")]
 position = Vector2(79, 51)
+damage = 200
 
 [node name="Goonenemy" parent="ActorContainer" node_paths=PackedStringArray("player") instance=ExtResource("8_gbfbk")]
-position = Vector2(88, 35)
+position = Vector2(19, 30)
 collision_mask = 9
 player = NodePath("../player")
-duration_between_hit = 2000
+duration_between_hit = 200
 duration_prop_hit = 300
-duration_between_range_attack = 400
-duration_prep_range_attack = 500
+duration_between_range_attack = 2000
+duration_prep_range_attack = 1000
 health = 200
 damage = 20
+knockback_intensity = 20.0
+duration_ground = 500.0
 
 [editable path="ActorContainer/BasicEnemy"]
 [editable path="ActorContainer/BasicEnemy/DamageEmiter"]

@@ -44,7 +44,7 @@ func on_rececive_damage(damage: int, directinon: Vector2, hi_type: DamageReceive
 		player.free_slot(self)
 # 重写父节点的设置朝向的函数让敌人朝正确方向
 func set_heading() -> void:
-	if player == null:
+	if player == null or not can_move():
 		return
 	heading = Vector2.LEFT if position.x > player.position.x else Vector2.RIGHT
 

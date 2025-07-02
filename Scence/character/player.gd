@@ -7,8 +7,9 @@ func _ready() -> void:
 	anim_attack = ["punch", "punch_alt", "kick", "round_kick"]
 # 处理键盘玩家键盘输入并根据键盘输入切换状态
 func handle_input() -> void:
-	var direction = Input.get_vector("ui_left","ui_right","ui_up","ui_down")
-	velocity = direction * speed
+	if can_move():
+		var direction = Input.get_vector("ui_left","ui_right","ui_up","ui_down")
+		velocity = direction * speed
 	if can_attack() and Input.is_action_just_pressed("attack"):
 		if has_knife:
 			state = State.THROW
@@ -26,6 +27,7 @@ func handle_input() -> void:
 		state = State.TAKE_OFF
 	if can_jump_kick() and Input.is_action_just_pressed("attack"):
 		state = State.JUMPKICK
+
 # 给离给定位置最近的敌人占一个位置并返回这个位置
 func reserve_slot(enemy: BaiscEnemy) -> EnemySlot:
 	var available_slots = enemy_slots.filter(func(slot: EnemySlot): return slot.is_free())
