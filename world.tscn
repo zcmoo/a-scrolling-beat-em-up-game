@@ -1,10 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://cilxw70jli3sv"]
+[gd_scene load_steps=12 format=3 uid="uid://cilxw70jli3sv"]
 
 [ext_resource type="PackedScene" uid="uid://xtj44mfkw662" path="res://Scence/stage/stage.tscn" id="1_f3sb7"]
 [ext_resource type="Script" uid="uid://dyb71d2grjfam" path="res://world.gd" id="1_tlwt5"]
 [ext_resource type="PackedScene" uid="uid://dacf2ntveqeik" path="res://Scence/props/barrel.tscn" id="2_aqk2v"]
 [ext_resource type="PackedScene" uid="uid://d00gae1hbcdkv" path="res://Scence/character/player.tscn" id="2_fj7yv"]
 [ext_resource type="Script" uid="uid://u4dqmxyh7ev1" path="res://camera_2d.gd" id="3_dwbse"]
+[ext_resource type="Script" uid="uid://gqqwxrfmrhem" path="res://actor_container.gd" id="4_ioo17"]
 [ext_resource type="PackedScene" uid="uid://soipbbb4tt4t" path="res://Scence/character/basic_enemy.tscn" id="5_036b0"]
 [ext_resource type="PackedScene" uid="uid://d27hpr8qe6nyq" path="res://Scence/props/knife.tscn" id="7_pkg7o"]
 [ext_resource type="PackedScene" uid="uid://ba3tdo10tnc23" path="res://Scence/character/gooenemy.tscn" id="8_gbfbk"]
@@ -49,11 +50,11 @@ shape = SubResource("RectangleShape2D_dwbse")
 
 [node name="ActorContainer" type="Node2D" parent="."]
 y_sort_enabled = true
+script = ExtResource("4_ioo17")
 
 [node name="player" parent="ActorContainer" instance=ExtResource("2_fj7yv")]
 unique_name_in_owner = true
-position = Vector2(59, 49)
-has_knife = true
+position = Vector2(11, 36)
 can_respawn = true
 health = 500
 damage_power = 20
@@ -79,10 +80,10 @@ duration_ground = 1000.0
 flight_speed = 100.0
 
 [node name="knife" parent="ActorContainer" instance=ExtResource("7_pkg7o")]
-position = Vector2(79, 44)
+position = Vector2(79, 51)
 
 [node name="Goonenemy" parent="ActorContainer" node_paths=PackedStringArray("player") instance=ExtResource("8_gbfbk")]
-position = Vector2(41, 41)
+position = Vector2(88, 35)
 collision_mask = 9
 player = NodePath("../player")
 duration_between_hit = 2000

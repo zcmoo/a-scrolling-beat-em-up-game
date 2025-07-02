@@ -23,6 +23,7 @@ extends CharacterBody2D
 @onready var knife_sprite : Sprite2D = $KnifeSprite
 @onready var raycast : RayCast2D = $RayCast2D
 @onready var collectible_sensor : Area2D = $CollectibleSensor
+@onready var weapon_postion : Node2D = $KnifeSprite/WeaponPostion 
 enum State {IDLE, WALK, ATTACK, TAKE_OFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUND, DEATH, FLY, PREP_ATTACK, THROW, PICK_UP}
 const GRAVITY = 500
 var state = State.IDLE
@@ -111,12 +112,12 @@ func handle_animation() -> void:
 func flip_sprite() -> void:
 	if heading == Vector2.RIGHT:
 		character_sprite.flip_h = false
-		knife_sprite.flip_h = false
+		knife_sprite.scale.x = 1
 		raycast.scale.x = 1
 		damage_emiter.scale.x = 1
 	else:
 		character_sprite.flip_h = true
-		knife_sprite.flip_h = true
+		knife_sprite.scale.x = -1
 		raycast.scale.x = -1
 		damage_emiter.scale.x = -1
 # 检查是否处于可攻击状态
@@ -212,6 +213,7 @@ func handle_prep_attack() -> void:
 func on_throw_complete() -> void:
 	state = State.IDLE
 	has_knife = false
+	EntityManager.sqawn_collectible.emit(COllectible.Type.KNIFE, COllectible.State.FLY, weapon_postion.global_position, heading)
 
 func handle_knife_resqwan() -> void:
 	if can_resqawn_knives and not has_knife and (Time.get_ticks_msec() - time_since_knife_dismiss > duration_between_knife_resqawn):

@@ -17,6 +17,9 @@ flight_speed = 120.0
 [node name="CharacterSprite" parent="." index="1"]
 texture = ExtResource("2_3m8t8")
 
+[node name="WeaponPostion" parent="KnifeSprite" index="0"]
+position = Vector2(14, -14)
+
 [editable path="DamageEmiter"]
 [editable path="DamageReceiver"]
 [editable path="collateralDamageEmiter"]

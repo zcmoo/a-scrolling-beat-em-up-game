@@ -40,6 +40,8 @@ monitorable = false
 
 [node name="KnifeSprite" type="Sprite2D" parent="."]
 
+[node name="WeaponPostion" type="Node2D" parent="KnifeSprite"]
+
 [node name="RayCast2D" type="RayCast2D" parent="."]
 target_position = Vector2(100, 0)
 collision_mask = 0

@@ -12,6 +12,8 @@ var anim_map ={
 	State.GROUND : "ground",
 	State.FLY : "fly"
 }
+var direction = Vector2.ZERO
+var velocity = Vector2.ZERO
 var height = 0.0
 var height_speed = 0.0
 const GRAVITY = 600.0
@@ -20,11 +22,15 @@ var state = State.FALL
 
 func _ready() -> void:
 	height_speed = knockdown_intensity 
+	if state == State.FLY:
+		velocity = direction * speed
 
 func _process(delta: float) -> void:
+	collectible_sprite.position = Vector2.UP * height
+	position += velocity * delta
+	collectible_sprite.flip_h = velocity.x < 0
 	handle_fall(delta)
 	handle_animation()
-	collectible_sprite.position = Vector2.UP * height
 
 func handle_fall(delta: float) -> void:
 	if state == State.FALL:
@@ -38,5 +44,3 @@ func handle_fall(delta: float) -> void:
 func handle_animation() -> void:
 	if animation_player.has_animation(anim_map[state]):
 		animation_player.play(anim_map[state])
-	else:
-		assert("have no this animation")
