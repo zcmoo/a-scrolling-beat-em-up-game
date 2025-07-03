@@ -38,6 +38,8 @@ monitorable = false
 
 [node name="collateralDamageEmiter" parent="." instance=ExtResource("3_7oexw")]
 
+[node name="GunSprite" type="Sprite2D" parent="."]
+
 [node name="KnifeSprite" type="Sprite2D" parent="."]
 
 [node name="WeaponPostion" type="Node2D" parent="KnifeSprite"]

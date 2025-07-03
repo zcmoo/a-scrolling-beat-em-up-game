@@ -3,6 +3,7 @@ extends CharacterBody2D
 @export var can_resqawn_knives : bool
 @export var duration_between_knife_resqawn : int
 @export var has_knife : bool
+@export var has_gun : bool
 @export var can_respawn : bool
 @export var health : int
 @export var damage : int
@@ -24,7 +25,8 @@ extends CharacterBody2D
 @onready var raycast : RayCast2D = $RayCast2D
 @onready var collectible_sensor : Area2D = $CollectibleSensor
 @onready var weapon_postion : Node2D = $KnifeSprite/WeaponPostion 
-enum State {IDLE, WALK, ATTACK, TAKE_OFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUND, DEATH, FLY, PREP_ATTACK, THROW, PICK_UP}
+@onready var gun_sprite : Sprite2D = $GunSprite
+enum State {IDLE, WALK, ATTACK, TAKE_OFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUND, DEATH, FLY, PREP_ATTACK, THROW, PICK_UP, SHOOT}
 const GRAVITY = 500
 var state = State.IDLE
 var height = 0.0
@@ -53,7 +55,8 @@ var animation_map : Dictionary = {
 	State.FLY: "fly",
 	State.PREP_ATTACK : "idle",
 	State.THROW : "throw",
-	State.PICK_UP : "pick_up"
+	State.PICK_UP : "pick_up",
+	State.SHOOT : "shoot"
 }
 
 # 节点生成后绑定当伤害发送器与伤害接受器碰撞时的回调函数，并将伤害接受器的对象作为参数传递给改回调函数
@@ -65,6 +68,14 @@ func _ready() -> void:
 	current_health = health
 # 游戏主循环中处理人物更新逻辑
 func _process(delta: float) -> void:
+	knife_sprite.visible = has_knife
+	gun_sprite.visible = has_gun
+	gun_sprite.position = Vector2.UP * height
+	damage_emiter.monitoring = is_attacking()
+	damage_receciver.monitorable = can_get_hurt()
+	character_sprite.position = Vector2.UP * height
+	knife_sprite.position = Vector2.UP * height
+	collision_shape.disabled = is_collision_disabled()
 	handle_input()
 	handle_movement()
 	handle_knife_resqwan()
@@ -74,13 +85,7 @@ func _process(delta: float) -> void:
 	hand_ground()
 	handle_death(delta)
 	set_heading()
-	knife_sprite.visible = has_knife
-	damage_emiter.monitoring = is_attacking()
-	damage_receciver.monitorable = can_get_hurt()
 	flip_sprite()
-	character_sprite.position = Vector2.UP * height
-	knife_sprite.position = Vector2.UP * height
-	collision_shape.disabled = is_collision_disabled()
 	move_and_slide()
 # 当伤害发送器与伤害接受器碰撞时的回调函数，该函数会根据油桶的位置和角色位置判断油桶飞出的方向，并把信号发送给传递过来的伤害接收器
 func on_emit_damage(damager_receiver: DamageReceiver) -> void:
@@ -117,11 +122,13 @@ func flip_sprite() -> void:
 	if heading == Vector2.RIGHT:
 		character_sprite.flip_h = false
 		knife_sprite.scale.x = 1
+		gun_sprite.scale.x = 1
 		raycast.scale.x = 1
 		damage_emiter.scale.x = 1
 	else:
 		character_sprite.flip_h = true
 		knife_sprite.scale.x = -1
+		gun_sprite.scale.x = -1
 		raycast.scale.x = -1
 		damage_emiter.scale.x = -1
 # 检查是否处于可攻击状态
@@ -174,6 +181,8 @@ func on_rececive_damage(damage: int, directinon: Vector2, hi_type: DamageReceive
 		if has_knife:
 			has_knife = false
 			time_since_knife_dismiss = Time.get_ticks_msec()
+		if has_gun:
+			has_gun = false
 		current_health = clamp(current_health - damage, 0, health)
 		if current_health == 0 or hi_type == DamageReceiver.HIType.KNOCKDOWN:
 			state = State.FALL
@@ -240,6 +249,8 @@ func can_pick_up() -> bool:
 	var collectible : COllectible = collectible_area[0]
 	if collectible.type == COllectible.Type.KNIFE and not has_knife:
 		return true
+	if collectible.type == COllectible.Type.GUN and not has_gun:
+		return true
 	return false
 
 func pickup_collectible() -> void:
@@ -247,6 +258,8 @@ func pickup_collectible() -> void:
 		var collectible_area = collectible_sensor.get_overlapping_areas() 
 		var collectible : COllectible = collectible_area[0]
 		if collectible.type == COllectible.Type.KNIFE and not has_knife:
+			has_knife = true
+		if collectible.type == COllectible.Type.GUN and not has_gun	:
 			has_knife = true
 		collectible.queue_free()
 	
