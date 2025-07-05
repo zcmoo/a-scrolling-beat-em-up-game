@@ -10,6 +10,7 @@ monitoring = false
 monitorable = false
 script = ExtResource("1_vers4")
 speed = 90.0
+damage = 20
 knockdown_intensity = 120.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

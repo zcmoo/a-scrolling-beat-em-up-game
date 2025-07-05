@@ -4,21 +4,26 @@
 [ext_resource type="Texture2D" uid="uid://cf6xi5m0i4gj" path="res://assets/assets/art/characters/enemy_goon.png" id="2_3m8t8"]
 
 [node name="Goonenemy" instance=ExtResource("1_7av36")]
-can_resqawn_knives = true
-duration_between_knife_resqawn = 1000
-has_knife = true
-damage = 1
+damage = 5
+health = 200
+damage_gun_shot = 10.0
+duration_ground = 700.0
+flight_speed = 120.0
 speed = 25.0
 knockdown_intensity = 80.0
 knockback_intensity = 10.0
-duration_ground = 700.0
-flight_speed = 120.0
+can_resqawn_knives = true
+duration_between_knife_resqawn = 1000
+has_gun = true
 
 [node name="CharacterSprite" parent="." index="1"]
 texture = ExtResource("2_3m8t8")
 
 [node name="WeaponPostion" parent="KnifeSprite" index="0"]
 position = Vector2(14, -14)
+
+[node name="RayCast2D" parent="." index="9"]
+collision_mask = 10
 
 [editable path="DamageEmiter"]
 [editable path="DamageReceiver"]

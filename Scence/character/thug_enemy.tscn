@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://cobgxx2p78jm3"]
+
+[ext_resource type="PackedScene" uid="uid://soipbbb4tt4t" path="res://Scence/character/basic_enemy.tscn" id="1_qe4a0"]
+[ext_resource type="Texture2D" uid="uid://eakkyn7tks0f" path="res://assets/assets/art/characters/enemy_thug.png" id="2_q0ijb"]
+
+[node name="ThugEnemy" instance=ExtResource("1_qe4a0")]
+duration_between_hit = 500
+duration_prop_hit = 300
+duration_between_range_attack = 2500
+duration_prep_range_attack = 1500
+damage_gun_shot = 10.0
+duration_ground = 700.0
+flight_speed = 100.0
+knockdown_intensity = 80.0
+knockback_intensity = 80.0
+has_gun = true
+
+[node name="CharacterSprite" parent="." index="1"]
+texture = ExtResource("2_q0ijb")
+
+[node name="RayCast2D" parent="." index="9"]
+collision_mask = 10
+
+[editable path="DamageEmiter"]
+[editable path="DamageReceiver"]
+[editable path="collateralDamageEmiter"]

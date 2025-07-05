@@ -1,19 +1,24 @@
 class_name Character
 extends CharacterBody2D
+@export var can_respawn : bool
+@export var damage : int
+@export var health : int
+@export var damage_power : int
+@export var damage_gun_shot : float
+@export var max_ammo_per_gun : int
+@export_group("Movement")
+@export var duration_ground : float
+@export var flight_speed : float
+@export var jump_intensity : float
+@export var speed : float
+@export var knockdown_intensity : float
+@export var knockback_intensity : float
+@export_group("Weapons")
+@export var autodestroy_on_drop : bool
 @export var can_resqawn_knives : bool
 @export var duration_between_knife_resqawn : int
 @export var has_knife : bool
 @export var has_gun : bool
-@export var can_respawn : bool
-@export var health : int
-@export var damage : int
-@export var speed : float
-@export var knockdown_intensity : float
-@export var knockback_intensity : float
-@export var jump_intensity : float
-@export var duration_ground : float
-@export var damage_power : int
-@export var flight_speed : float
 # 需要被其它子场景继承并调用自己的子节点时必须用$引用其它节点，不能用%
 @onready var animation_player : AnimationPlayer = $AnimationPlayer
 @onready var character_sprite : Sprite2D = $CharacterSprite
@@ -26,7 +31,7 @@ extends CharacterBody2D
 @onready var collectible_sensor : Area2D = $CollectibleSensor
 @onready var weapon_postion : Node2D = $KnifeSprite/WeaponPostion 
 @onready var gun_sprite : Sprite2D = $GunSprite
-enum State {IDLE, WALK, ATTACK, TAKE_OFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUND, DEATH, FLY, PREP_ATTACK, THROW, PICK_UP, SHOOT}
+enum State {IDLE, WALK, ATTACK, TAKE_OFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUND, DEATH, FLY, PREP_ATTACK, THROW, PICK_UP, SHOOT, PRE_SHOOT}
 const GRAVITY = 500
 var state = State.IDLE
 var height = 0.0
@@ -38,7 +43,7 @@ var attack_combo_index = 0
 var time_since_ground = Time.get_ticks_msec() 
 var time_since_knife_dismiss = Time.get_ticks_msec()
 var anim_attack = []
-
+var ammo_left = 0
 # 定义播放动画的字典
 var animation_map : Dictionary = {
 	State.IDLE: "idle",
@@ -56,8 +61,10 @@ var animation_map : Dictionary = {
 	State.PREP_ATTACK : "idle",
 	State.THROW : "throw",
 	State.PICK_UP : "pick_up",
-	State.SHOOT : "shoot"
+	State.SHOOT : "shoot",
+	State.PRE_SHOOT : "idle"
 }
+
 
 # 节点生成后绑定当伤害发送器与伤害接受器碰撞时的回调函数，并将伤害接受器的对象作为参数传递给改回调函数
 func _ready() -> void:
@@ -70,7 +77,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	knife_sprite.visible = has_knife
 	gun_sprite.visible = has_gun
-	gun_sprite.position = Vector2.UP * height
+	gun_sprite.position = Vector2.UP * height 
 	damage_emiter.monitoring = is_attacking()
 	damage_receciver.monitorable = can_get_hurt()
 	character_sprite.position = Vector2.UP * height
@@ -78,6 +85,7 @@ func _process(delta: float) -> void:
 	collision_shape.disabled = is_collision_disabled()
 	handle_input()
 	handle_movement()
+	handle_pre_shoot()
 	handle_knife_resqwan()
 	handle_animation()
 	handle_air_time(delta)
@@ -106,6 +114,8 @@ func handle_movement() -> void:
 			state = State.IDLE
 		else:
 			state = State.WALK
+func handle_pre_shoot() -> void:
+	pass # override me
 # 处理键盘输入，在子节点被重写
 func handle_input() -> void:
 	pass # override me
@@ -143,12 +153,15 @@ func can_move() -> bool:
 # 检查是否处于可跳跃状态
 func can_jump() -> bool:
 	return state == State.IDLE or state == State.WALK
+# 检查是否携带武器
+func is_carring_weapon() -> bool:
+	return has_knife or has_gun
 # 检查是否处于可飞踢状态
 func can_jump_kick() -> bool:
 	return state == State.JUMP
 # 检查是否处于可攻击状态
 func can_get_hurt() -> bool:
-	return [State.IDLE, State.WALK, State.TAKE_OFF, State.LAND, State.ATTACK, State.PREP_ATTACK].has(state)
+	return [State.IDLE, State.WALK, State.TAKE_OFF, State.LAND, State.ATTACK, State.PREP_ATTACK, State.SHOOT, State.PRE_SHOOT].has(state)
 # 当动画播放完后的回调函数
 func on_action_complete() -> void:
 	state = State.IDLE
@@ -176,13 +189,16 @@ func handle_air_time(delta: float) -> void:
 # 角色收到攻击后扣血和击退和击飞
 func on_rececive_damage(damage: int, directinon: Vector2, hi_type: DamageReceiver.HIType) -> void:
 	if can_get_hurt():
+		attack_combo_index = 0
 		heading = -directinon
 		can_resqawn_knives = false
 		if has_knife:
 			has_knife = false
+			EntityManager.sqawn_collectible.emit(COllectible.Type.KNIFE, COllectible.State.FALL, global_position, Vector2.ZERO, 0.0, autodestroy_on_drop)
 			time_since_knife_dismiss = Time.get_ticks_msec()
 		if has_gun:
 			has_gun = false
+			EntityManager.sqawn_collectible.emit(COllectible.Type.GUN, COllectible.State.FALL, global_position, Vector2.ZERO, 0.0, autodestroy_on_drop)
 		current_health = clamp(current_health - damage, 0, health)
 		if current_health == 0 or hi_type == DamageReceiver.HIType.KNOCKDOWN:
 			state = State.FALL
@@ -229,10 +245,15 @@ func handle_prep_attack() -> void:
 
 func on_throw_complete() -> void:
 	state = State.IDLE
-	has_knife = false
-	var knife_global_postion = Vector2(weapon_postion.global_position.x, global_position.y)
-	var knife_height = -weapon_postion.position.y
-	EntityManager.sqawn_collectible.emit(COllectible.Type.KNIFE, COllectible.State.FLY, knife_global_postion, heading, knife_height)
+	var collect_type = COllectible.Type.KNIFE
+	if has_gun:
+		collect_type = COllectible.Type.GUN
+		has_gun = false
+	else:
+		has_knife = false
+	var collectible_global_postion = Vector2(weapon_postion.global_position.x, global_position.y)
+	var collectible_height = -weapon_postion.position.y
+	EntityManager.sqawn_collectible.emit(collect_type, COllectible.State.FLY, collectible_global_postion, heading, collectible_height, false)
 
 func handle_knife_resqwan() -> void:
 	if can_resqawn_knives and not has_knife and (Time.get_ticks_msec() - time_since_knife_dismiss > duration_between_knife_resqawn):
@@ -243,14 +264,18 @@ func on_pick_up_complete() -> void:
 	pickup_collectible()
 
 func can_pick_up() -> bool:
+	if not can_respawn:
+		return false
 	var collectible_area = collectible_sensor.get_overlapping_areas()
 	if collectible_area.size() == 0:
 		return false
 	var collectible : COllectible = collectible_area[0]
-	if collectible.type == COllectible.Type.KNIFE and not has_knife:
+	if collectible.type == COllectible.Type.KNIFE and not is_carring_weapon():
 		return true
-	if collectible.type == COllectible.Type.GUN and not has_gun:
+	if collectible.type == COllectible.Type.GUN and not is_carring_weapon():
 		return true
+	if collectible.type == COllectible.Type.FOOD:
+		return true	
 	return false
 
 func pickup_collectible() -> void:
@@ -260,6 +285,23 @@ func pickup_collectible() -> void:
 		if collectible.type == COllectible.Type.KNIFE and not has_knife:
 			has_knife = true
 		if collectible.type == COllectible.Type.GUN and not has_gun	:
-			has_knife = true
+			has_gun = true
+			ammo_left = max_ammo_per_gun
+		if collectible.type == COllectible.Type.FOOD:
+			print(current_health)
+			current_health = health
+			print(current_health)
 		collectible.queue_free()
-	
+
+func shoot_gun() -> void:
+	state = State.SHOOT
+	velocity = Vector2.ZERO
+	var target_point = heading * (global_position.x + get_viewport_rect().size.x)
+	var target = raycast.get_collider()
+	if target != null:
+		target_point = raycast.get_collision_point()
+		target.on_rececive_damage(damage_gun_shot, heading, DamageReceiver.HIType.KNOCKDOWN)
+	var weapon_root_position = Vector2(weapon_postion.global_position.x, position.y)
+	var weapon_height = -weapon_postion.position.y
+	var distance = target_point.x - weapon_postion.global_position.x
+	EntityManager.sqawn_shot.emit(weapon_root_position, distance, weapon_height)

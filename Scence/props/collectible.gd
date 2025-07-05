@@ -2,6 +2,7 @@ class_name COllectible
 extends Area2D
 enum State {FALL, GROUND, FLY}
 enum Type {KNIFE, GUN, FOOD}
+var auto_destroy : bool
 @export var type : Type
 @export var speed : float
 @export var damage : int
@@ -34,15 +35,21 @@ func _process(delta: float) -> void:
 	collectible_sprite.position = Vector2.UP * height
 	position += velocity * delta
 	collectible_sprite.flip_h = velocity.x < 0
+	monitorable = state == State.GROUND
+	damage_emitter.monitoring = state == State.FLY
 	handle_fall(delta)
 	handle_animation()
 
 func handle_fall(delta: float) -> void:
 	if state == State.FALL:
 		height += height_speed * delta
+		if auto_destroy:
+			modulate.a -= delta
 		if height < 0:
 			height = 0
 			state = State.GROUND
+			if auto_destroy:
+				queue_free()
 		else:
 			height_speed -= GRAVITY * delta
 

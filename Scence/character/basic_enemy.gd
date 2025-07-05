@@ -83,10 +83,12 @@ func goto_range_position() -> void:
 		time_since_knife_dismiss = Time.get_ticks_msec()
 		time_since_last_range_attack = Time.get_ticks_msec()
 	if can_range_attack() and has_gun and raycast.is_colliding():
-		state = State.SHOOT
-		time_since_last_range_attack = Time.get_ticks_msec()
+		state = State.PRE_SHOOT
+		time_since_prep_range_attack = Time.get_ticks_msec()
 
 func handle_input() -> void:
+	if health == 800:
+		print(current_health)
 	if player != null and can_move():
 		if can_resqawn_knives or has_knife or has_gun:
 			goto_range_position()
@@ -97,3 +99,8 @@ func can_range_attack() -> bool:
 	if Time.get_ticks_msec() - time_since_last_range_attack < duration_between_range_attack:
 		return false
 	return super.can_attack()
+
+func handle_pre_shoot() -> void:
+	if state == State.PRE_SHOOT and (Time.get_ticks_msec() - time_since_prep_range_attack > duration_prep_range_attack):
+		shoot_gun()
+		time_since_last_range_attack = Time.get_ticks_msec()

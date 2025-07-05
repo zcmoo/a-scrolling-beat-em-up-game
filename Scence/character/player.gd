@@ -1,10 +1,22 @@
 class_name Player
 extends Character
+@export var max_duration_between_successful_hit : int
 @onready var enemy_slots : Array = $EnemySlots.get_children()
+var time_since_last_successful_attack = Time.get_ticks_msec()
+
 
 func _ready() -> void:
 	super._ready()
 	anim_attack = ["punch", "punch_alt", "kick", "round_kick"]
+	
+func _process(delta: float) -> void:
+	super._process(delta)
+	process_time_between_combos()
+
+func process_time_between_combos() -> void:
+	if Time.get_ticks_msec() - time_since_last_successful_attack > max_duration_between_successful_hit:
+		attack_combo_index = 0
+	
 # 处理键盘玩家键盘输入并根据键盘输入切换状态
 func handle_input() -> void:
 	if can_move():
@@ -14,19 +26,25 @@ func handle_input() -> void:
 		if has_knife:
 			state = State.THROW
 		elif has_gun:
-			state = State.SHOOT
+			if ammo_left > 0:
+				shoot_gun()
+				ammo_left -= 1
+			else:
+				state = State.THROW
 		else:
 			if can_pick_up():
 				state = State.PICK_UP
 			else:
 				state = State.ATTACK
 				if is_last_hit_successful:
+					time_since_last_successful_attack = Time.get_ticks_msec()
 					attack_combo_index = (attack_combo_index + 1) % anim_attack.size()
 					is_last_hit_successful = false
 				else:
 					attack_combo_index = 0
 	if can_jump() and Input.is_action_just_pressed("jump"):
 		state = State.TAKE_OFF
+		attack_combo_index = 0
 	if can_jump_kick() and Input.is_action_just_pressed("attack"):
 		state = State.JUMPKICK
 

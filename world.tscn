@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://cilxw70jli3sv"]
+[gd_scene load_steps=13 format=3 uid="uid://cilxw70jli3sv"]
 
 [ext_resource type="PackedScene" uid="uid://xtj44mfkw662" path="res://Scence/stage/stage.tscn" id="1_f3sb7"]
 [ext_resource type="Script" uid="uid://dyb71d2grjfam" path="res://world.gd" id="1_tlwt5"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://soipbbb4tt4t" path="res://Scence/character/basic_enemy.tscn" id="5_036b0"]
 [ext_resource type="PackedScene" uid="uid://d27hpr8qe6nyq" path="res://Scence/props/knife.tscn" id="7_pkg7o"]
 [ext_resource type="PackedScene" uid="uid://ba3tdo10tnc23" path="res://Scence/character/gooenemy.tscn" id="8_gbfbk"]
+[ext_resource type="PackedScene" uid="uid://cobgxx2p78jm3" path="res://Scence/character/thug_enemy.tscn" id="10_wse8f"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_036b0"]
 size = Vector2(8, 72)
@@ -54,55 +55,70 @@ script = ExtResource("4_ioo17")
 
 [node name="player" parent="ActorContainer" instance=ExtResource("2_fj7yv")]
 unique_name_in_owner = true
-position = Vector2(60, 47)
-has_gun = true
+position = Vector2(41, 45)
+max_duration_between_successful_hit = 2000
 can_respawn = true
-health = 200
+health = 500
+damage_power = 20
+damage_gun_shot = 500.0
+max_ammo_per_gun = 5
+duration_ground = 500.0
+flight_speed = 100.0
 knockdown_intensity = 80.0
 knockback_intensity = 20.0
-duration_ground = 500.0
-damage_power = 20
-flight_speed = 100.0
+autodestroy_on_drop = true
 
 [node name="Barrel" parent="ActorContainer" instance=ExtResource("2_aqk2v")]
-position = Vector2(44, 50)
+position = Vector2(88, 49)
+content_type = 2
+
+[node name="Barrel2" parent="ActorContainer" instance=ExtResource("2_aqk2v")]
+position = Vector2(18, 45)
+content_type = 1
+
+[node name="knife" parent="ActorContainer" instance=ExtResource("7_pkg7o")]
+position = Vector2(79, 60)
+
+[node name="Goonenemy" parent="ActorContainer" node_paths=PackedStringArray("player") instance=ExtResource("8_gbfbk")]
+position = Vector2(403, 62)
+player = NodePath("../player")
+duration_between_hit = 200
+duration_prop_hit = 300
+duration_between_range_attack = 1500
+duration_prep_range_attack = 1000
+damage = 20
+damage_gun_shot = 5.0
+duration_ground = 500.0
+knockback_intensity = 20.0
+has_knife = true
+has_gun = false
+
+[node name="ThugEnemy" parent="ActorContainer" node_paths=PackedStringArray("player") instance=ExtResource("10_wse8f")]
+position = Vector2(408, 37)
+player = NodePath("../player")
+duration_between_hit = 200
+duration_between_range_attack = 1500
+duration_prep_range_attack = 1000
+health = 200
+speed = 25.0
 
 [node name="BasicEnemy" parent="ActorContainer" node_paths=PackedStringArray("player") instance=ExtResource("5_036b0")]
-position = Vector2(17, 40)
-collision_mask = 9
+position = Vector2(421, 56)
 player = NodePath("../player")
 duration_between_hit = 200
 duration_prop_hit = 300
 duration_between_range_attack = 1000
-duration_prep_range_attack = 500
-duration_between_knife_resqawn = 3000
-has_gun = true
-health = 200
+duration_prep_range_attack = 1000
 damage = 20
-speed = 25.0
-knockdown_intensity = 150.0
-knockback_intensity = 50.0
+health = 200
+damage_gun_shot = 5.0
 duration_ground = 500.0
 flight_speed = 100.0
+speed = 25.0
+knockdown_intensity = 80.0
+knockback_intensity = 50.0
 
-[node name="knife" parent="ActorContainer" instance=ExtResource("7_pkg7o")]
-position = Vector2(61, 48)
-damage = 200
-
-[node name="Goonenemy" parent="ActorContainer" node_paths=PackedStringArray("player") instance=ExtResource("8_gbfbk")]
-position = Vector2(19, 30)
-collision_mask = 9
-player = NodePath("../player")
-duration_between_hit = 200
-duration_prop_hit = 300
-duration_between_range_attack = 2000
-duration_prep_range_attack = 1000
-health = 200
-damage = 20
-knockback_intensity = 20.0
-duration_ground = 500.0
-
-[editable path="ActorContainer/BasicEnemy"]
-[editable path="ActorContainer/BasicEnemy/DamageEmiter"]
-[editable path="ActorContainer/BasicEnemy/DamageReceiver"]
-[editable path="ActorContainer/BasicEnemy/collateralDamageEmiter"]
+[editable path="ActorContainer/player"]
+[editable path="ActorContainer/player/DamageEmiter"]
+[editable path="ActorContainer/player/DamageReceiver"]
+[editable path="ActorContainer/player/collateralDamageEmiter"]
