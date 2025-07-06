@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cilxw70jli3sv"]
+[gd_scene load_steps=14 format=3 uid="uid://cilxw70jli3sv"]
 
 [ext_resource type="PackedScene" uid="uid://xtj44mfkw662" path="res://Scence/stage/stage.tscn" id="1_f3sb7"]
 [ext_resource type="Script" uid="uid://dyb71d2grjfam" path="res://world.gd" id="1_tlwt5"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://d27hpr8qe6nyq" path="res://Scence/props/knife.tscn" id="7_pkg7o"]
 [ext_resource type="PackedScene" uid="uid://ba3tdo10tnc23" path="res://Scence/character/gooenemy.tscn" id="8_gbfbk"]
 [ext_resource type="PackedScene" uid="uid://cobgxx2p78jm3" path="res://Scence/character/thug_enemy.tscn" id="10_wse8f"]
+[ext_resource type="PackedScene" uid="uid://t8r2cfoijjmi" path="res://Scence/character/lgor_boss.tscn" id="11_ic0uy"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_036b0"]
 size = Vector2(8, 72)
@@ -80,7 +81,7 @@ content_type = 1
 position = Vector2(79, 60)
 
 [node name="Goonenemy" parent="ActorContainer" node_paths=PackedStringArray("player") instance=ExtResource("8_gbfbk")]
-position = Vector2(403, 62)
+position = Vector2(270, 38)
 player = NodePath("../player")
 duration_between_hit = 200
 duration_prop_hit = 300
@@ -89,21 +90,22 @@ duration_prep_range_attack = 1000
 damage = 20
 damage_gun_shot = 5.0
 duration_ground = 500.0
+speed = 0.0
 knockback_intensity = 20.0
 has_knife = true
 has_gun = false
 
 [node name="ThugEnemy" parent="ActorContainer" node_paths=PackedStringArray("player") instance=ExtResource("10_wse8f")]
-position = Vector2(408, 37)
+position = Vector2(276, 55)
 player = NodePath("../player")
 duration_between_hit = 200
 duration_between_range_attack = 1500
 duration_prep_range_attack = 1000
 health = 200
-speed = 25.0
+speed = 0.0
 
 [node name="BasicEnemy" parent="ActorContainer" node_paths=PackedStringArray("player") instance=ExtResource("5_036b0")]
-position = Vector2(421, 56)
+position = Vector2(249, 55)
 player = NodePath("../player")
 duration_between_hit = 200
 duration_prop_hit = 300
@@ -114,9 +116,18 @@ health = 200
 damage_gun_shot = 5.0
 duration_ground = 500.0
 flight_speed = 100.0
-speed = 25.0
+speed = 0.0
 knockdown_intensity = 80.0
 knockback_intensity = 50.0
+
+[node name="lgor Boss" parent="ActorContainer" node_paths=PackedStringArray("player") instance=ExtResource("11_ic0uy")]
+position = Vector2(77, 42)
+player = NodePath("../player")
+duration_between_attack = 1500
+duration_vulnerable = 1500
+damage = 50
+health = 500
+speed = 20.0
 
 [editable path="ActorContainer/player"]
 [editable path="ActorContainer/player/DamageEmiter"]

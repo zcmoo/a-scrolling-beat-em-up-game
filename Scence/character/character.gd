@@ -31,7 +31,7 @@ extends CharacterBody2D
 @onready var collectible_sensor : Area2D = $CollectibleSensor
 @onready var weapon_postion : Node2D = $KnifeSprite/WeaponPostion 
 @onready var gun_sprite : Sprite2D = $GunSprite
-enum State {IDLE, WALK, ATTACK, TAKE_OFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUND, DEATH, FLY, PREP_ATTACK, THROW, PICK_UP, SHOOT, PRE_SHOOT}
+enum State {IDLE, WALK, ATTACK, TAKE_OFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUND, DEATH, FLY, PREP_ATTACK, THROW, PICK_UP, SHOOT, PRE_SHOOT, RECOVER}
 const GRAVITY = 500
 var state = State.IDLE
 var height = 0.0
@@ -62,7 +62,8 @@ var animation_map : Dictionary = {
 	State.THROW : "throw",
 	State.PICK_UP : "pick_up",
 	State.SHOOT : "shoot",
-	State.PRE_SHOOT : "idle"
+	State.PRE_SHOOT : "idle",
+	State.RECOVER : "recover"
 }
 
 
@@ -83,6 +84,7 @@ func _process(delta: float) -> void:
 	character_sprite.position = Vector2.UP * height
 	knife_sprite.position = Vector2.UP * height
 	collision_shape.disabled = is_collision_disabled()
+	collater_damage_emiter.monitoring = state == State.FLY
 	handle_input()
 	handle_movement()
 	handle_pre_shoot()
