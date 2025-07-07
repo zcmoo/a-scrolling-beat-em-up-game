@@ -1,11 +1,12 @@
 class_name LgorBoss
 extends Character
 @export var player : Player
-@export var distance_from_player : int
 @export var duration_between_attack : int
 @export var duration_vulnerable : int
+const DISTANCE_FROM_PLAYER = 30
 const GROUND_FRICTION = 50
 var knockback_force = Vector2.ZERO
+var death_flag = false
 var time_last_attack = Time.get_ticks_msec()
 var time_start_vulnerable = Time.get_ticks_msec()
 
@@ -17,9 +18,9 @@ func _process(delta: float) -> void:
 func get_target_destination() -> Vector2:
 	var target = Vector2.ZERO
 	if position.x < player.position.x:
-		target = player.position + Vector2.LEFT * distance_from_player
+		target = player.position + Vector2.LEFT * DISTANCE_FROM_PLAYER
 	else:
-		target = player.position + Vector2.RIGHT * distance_from_player
+		target = player.position + Vector2.RIGHT * DISTANCE_FROM_PLAYER
 	return target
 
 func is_player_within_rang() -> bool:
@@ -58,9 +59,12 @@ func on_rececive_damage(damage: int, directinon: Vector2, hi_type: DamageReceive
 		return 
 	current_health = clamp(current_health - damage, 0, health)
 	if current_health == 0:
+		EntityManager.death_enemy.emit(self)
 		state = State.FALL
 		height_speed = knockdown_intensity
 		velocity = directinon * height_speed
+		if height <= 0:
+			death_flag = true
 	else:
 		velocity = Vector2.ZERO
 		state = State.HURT
@@ -91,3 +95,12 @@ func on_emit_damage(damager_receiver: DamageReceiver) -> void:
 
 func  is_attacking() -> bool:
 	return [State.FLY].has(state)
+
+func handle_death(delta: float) -> void:
+	if death_flag == true:
+		modulate.a -= delta / 2.0
+		if modulate.a <= 0:
+			queue_free()
+
+		
+	

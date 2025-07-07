@@ -30,3 +30,5 @@ collision_mask = 0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WalkColiders/StaticBody2D2"]
 position = Vector2(202, 71)
 shape = SubResource("RectangleShape2D_i3pyn")
+
+[node name="Checkpoints" type="Node2D" parent="."]

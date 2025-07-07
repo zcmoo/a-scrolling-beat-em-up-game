@@ -42,6 +42,7 @@ func on_rececive_damage(damage: int, directinon: Vector2, hi_type: DamageReceive
 		#velocity = Vector2.ZERO
 	if current_health <= 0:
 		player.free_slot(self)
+		EntityManager.death_enemy.emit(self)
 # 重写父节点的设置朝向的函数让敌人朝正确方向
 func set_heading() -> void:
 	if player == null or not can_move():

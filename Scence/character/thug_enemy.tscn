@@ -4,15 +4,11 @@
 [ext_resource type="Texture2D" uid="uid://eakkyn7tks0f" path="res://assets/assets/art/characters/enemy_thug.png" id="2_q0ijb"]
 
 [node name="ThugEnemy" instance=ExtResource("1_qe4a0")]
-duration_between_hit = 500
-duration_prop_hit = 300
-duration_between_range_attack = 2500
-duration_prep_range_attack = 1500
+type = 3
 damage_gun_shot = 10.0
 duration_ground = 700.0
 flight_speed = 100.0
-knockdown_intensity = 80.0
-knockback_intensity = 80.0
+knockback_intensity = 20.0
 has_gun = true
 
 [node name="CharacterSprite" parent="." index="1"]

@@ -1,5 +1,6 @@
 class_name Character
 extends CharacterBody2D
+@export var type : Type
 @export var can_respawn : bool
 @export var damage : int
 @export var health : int
@@ -32,6 +33,7 @@ extends CharacterBody2D
 @onready var weapon_postion : Node2D = $KnifeSprite/WeaponPostion 
 @onready var gun_sprite : Sprite2D = $GunSprite
 enum State {IDLE, WALK, ATTACK, TAKE_OFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUND, DEATH, FLY, PREP_ATTACK, THROW, PICK_UP, SHOOT, PRE_SHOOT, RECOVER}
+enum Type {PLAYER, PUNK, GOON, THUG, BOSS}
 const GRAVITY = 500
 var state = State.IDLE
 var height = 0.0

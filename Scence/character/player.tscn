@@ -791,16 +791,16 @@ debug_color = Color(0.615337, 0.519623, 0.379195, 0.42)
 [node name="EnemySlots" type="Node2D" parent="." index="6"]
 
 [node name="EnemySlot" parent="EnemySlots" index="0" instance=ExtResource("4_k61ru")]
-position = Vector2(9, -1)
+position = Vector2(12, -4)
 
 [node name="EnemySlot2" parent="EnemySlots" index="1" instance=ExtResource("4_k61ru")]
-position = Vector2(9, 1)
+position = Vector2(12, 3)
 
 [node name="EnemySlot3" parent="EnemySlots" index="2" instance=ExtResource("4_k61ru")]
-position = Vector2(-8, -1)
+position = Vector2(-12, -4)
 
 [node name="EnemySlot4" parent="EnemySlots" index="3" instance=ExtResource("4_k61ru")]
-position = Vector2(-8, 1)
+position = Vector2(-12, 3)
 
 [node name="GunSprite" parent="." index="8"]
 texture = ExtResource("5_8tbf0")
