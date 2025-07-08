@@ -32,7 +32,7 @@ extends CharacterBody2D
 @onready var collectible_sensor : Area2D = $CollectibleSensor
 @onready var weapon_postion : Node2D = $KnifeSprite/WeaponPostion 
 @onready var gun_sprite : Sprite2D = $GunSprite
-enum State {IDLE, WALK, ATTACK, TAKE_OFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUND, DEATH, FLY, PREP_ATTACK, THROW, PICK_UP, SHOOT, PRE_SHOOT, RECOVER}
+enum State {IDLE, WALK, ATTACK, TAKE_OFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUND, DEATH, FLY, PREP_ATTACK, THROW, PICK_UP, SHOOT, PRE_SHOOT, RECOVER, DROP}
 enum Type {PLAYER, PUNK, GOON, THUG, BOSS}
 const GRAVITY = 500
 var state = State.IDLE
@@ -65,12 +65,14 @@ var animation_map : Dictionary = {
 	State.PICK_UP : "pick_up",
 	State.SHOOT : "shoot",
 	State.PRE_SHOOT : "idle",
-	State.RECOVER : "recover"
+	State.RECOVER : "recover",
+	State.DROP : "idle"
 }
 
 
 # 节点生成后绑定当伤害发送器与伤害接受器碰撞时的回调函数，并将伤害接受器的对象作为参数传递给改回调函数
 func _ready() -> void:
+	set_sprite_height_postion()
 	damage_emiter.area_entered.connect(on_emit_damage.bind())
 	damage_receciver.damage_receive.connect(on_rececive_damage.bind())
 	collater_damage_emiter.area_entered.connect(on_emit_collateral_damage.bind())
@@ -78,15 +80,9 @@ func _ready() -> void:
 	current_health = health
 # 游戏主循环中处理人物更新逻辑
 func _process(delta: float) -> void:
-	knife_sprite.visible = has_knife
-	gun_sprite.visible = has_gun
-	gun_sprite.position = Vector2.UP * height 
-	damage_emiter.monitoring = is_attacking()
-	damage_receciver.monitorable = can_get_hurt()
-	character_sprite.position = Vector2.UP * height
-	knife_sprite.position = Vector2.UP * height
-	collision_shape.disabled = is_collision_disabled()
-	collater_damage_emiter.monitoring = state == State.FLY
+	setup_collisions()
+	set_sprite_height_postion()
+	set_sprite_visibility()
 	handle_input()
 	handle_movement()
 	handle_pre_shoot()
@@ -99,6 +95,27 @@ func _process(delta: float) -> void:
 	set_heading()
 	flip_sprite()
 	move_and_slide()
+
+func setup_collisions() -> void:
+	damage_receciver.monitorable = can_get_hurt()
+	collision_shape.disabled = is_collision_disabled()
+	if self.type != Character.Type.BOSS:
+		damage_emiter.monitoring = is_attacking()
+	else:
+		damage_emiter.monitoring = state == State.FLY
+	if self.type != Character.Type.BOSS:
+		collater_damage_emiter.monitoring = state == State.FLY
+	else:
+		collater_damage_emiter.monitoring = is_attacking()
+
+func set_sprite_height_postion() -> void:
+	gun_sprite.position = Vector2.UP * height 
+	character_sprite.position = Vector2.UP * height
+	knife_sprite.position = Vector2.UP * height
+
+func set_sprite_visibility() -> void:
+	knife_sprite.visible = has_knife
+	gun_sprite.visible = has_gun
 # 当伤害发送器与伤害接受器碰撞时的回调函数，该函数会根据油桶的位置和角色位置判断油桶飞出的方向，并把信号发送给传递过来的伤害接收器
 func on_emit_damage(damager_receiver: DamageReceiver) -> void:
 	var hi_type = DamageReceiver.HIType.NOMAL
@@ -178,7 +195,7 @@ func on_land_complete() -> void:
 	state = State.IDLE
 # 处理角色跳起来时受到重力影响
 func handle_air_time(delta: float) -> void:
-	if [State.JUMP, State.JUMPKICK, State.FALL].has(state):
+	if [State.JUMP, State.JUMPKICK, State.FALL, State.DROP].has(state):
 		height += height_speed * delta
 		if height < 0:
 			height = 0
@@ -268,7 +285,9 @@ func on_pick_up_complete() -> void:
 	pickup_collectible()
 
 func can_pick_up() -> bool:
-	if not can_respawn:
+	if can_resqawn_knives:
+		return false
+	if Time.get_ticks_msec() - time_since_knife_dismiss < duration_between_knife_resqawn:
 		return false
 	var collectible_area = collectible_sensor.get_overlapping_areas()
 	if collectible_area.size() == 0:

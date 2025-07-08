@@ -1,40 +1,19 @@
-[gd_scene load_steps=5 format=3 uid="uid://c7xnk7oyaqfv5"]
+[gd_scene load_steps=4 format=3 uid="uid://c7xnk7oyaqfv5"]
 
 [ext_resource type="PackedScene" uid="uid://xtj44mfkw662" path="res://Scence/stage/stage.tscn" id="1_epbx8"]
 [ext_resource type="PackedScene" uid="uid://c5788vi08ltf0" path="res://Scence/stage/check_point.tscn" id="2_qylii"]
-[ext_resource type="PackedScene" uid="uid://ba3tdo10tnc23" path="res://Scence/character/gooenemy.tscn" id="3_3pgo7"]
-[ext_resource type="PackedScene" uid="uid://soipbbb4tt4t" path="res://Scence/character/basic_enemy.tscn" id="4_nphe1"]
+[ext_resource type="PackedScene" uid="uid://dacf2ntveqeik" path="res://Scence/props/barrel.tscn" id="5_8on0n"]
 
 [node name="Stage-01-Street" instance=ExtResource("1_epbx8")]
 
 [node name="CheckPoint" parent="Checkpoints" index="0" instance=ExtResource("2_qylii")]
 position = Vector2(89, 0)
 
-[node name="Goonenemy" parent="Checkpoints/CheckPoint/enemies" index="0" instance=ExtResource("3_3pgo7")]
-position = Vector2(103, 57)
-duration_between_hit = 0
-duration_prop_hit = 0
-duration_between_range_attack = 0
-duration_prep_range_attack = 0
-type = 0
+[node name="Barrel" parent="Containers" index="0" instance=ExtResource("5_8on0n")]
+position = Vector2(142, 45)
+content_type = 2
 
-[node name="Goonenemy2" parent="Checkpoints/CheckPoint/enemies" index="1" instance=ExtResource("3_3pgo7")]
-position = Vector2(78, 58)
-duration_between_hit = 0
-duration_prop_hit = 0
-duration_between_range_attack = 0
-duration_prep_range_attack = 0
-type = 0
-
-[node name="Goonenemy3" parent="Checkpoints/CheckPoint/enemies" index="2" instance=ExtResource("3_3pgo7")]
-position = Vector2(104, 39)
-duration_between_hit = 0
-duration_prop_hit = 0
-duration_between_range_attack = 0
-duration_prep_range_attack = 0
-type = 0
-
-[node name="BasicEnemy" parent="Checkpoints/CheckPoint/enemies" index="3" instance=ExtResource("4_nphe1")]
-position = Vector2(80, 34)
+[node name="Barrel2" parent="Containers" index="1" instance=ExtResource("5_8on0n")]
+content_type = 1
 
 [editable path="Checkpoints/CheckPoint"]

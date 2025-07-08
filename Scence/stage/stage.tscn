@@ -1,11 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://xtj44mfkw662"]
+[gd_scene load_steps=4 format=3 uid="uid://xtj44mfkw662"]
 
+[ext_resource type="Script" uid="uid://b0e4o31sdpwrh" path="res://Scence/stage/stage.gd" id="1_55m10"]
 [ext_resource type="Texture2D" uid="uid://bb5kxjiw3ua25" path="res://assets/assets/art/backgrounds/street-background.png" id="1_i3pyn"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i3pyn"]
 size = Vector2(426, 36)
 
 [node name="Stage" type="Node2D"]
+script = ExtResource("1_55m10")
 
 [node name="background" type="Node2D" parent="."]
 
@@ -32,3 +34,5 @@ position = Vector2(202, 71)
 shape = SubResource("RectangleShape2D_i3pyn")
 
 [node name="Checkpoints" type="Node2D" parent="."]
+
+[node name="Containers" type="Node2D" parent="."]

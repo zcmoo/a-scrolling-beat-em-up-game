@@ -481,19 +481,18 @@ size = Vector2(3, 3)
 
 [node name="BasicEnemy" instance=ExtResource("1_fuapy")]
 collision_layer = 4
-collision_mask = 9
 script = ExtResource("2_pdwaq")
-duration_between_hit = 700
-duration_prop_hit = 700
-duration_between_range_attack = 1500
-duration_prep_range_attack = 1000
+duration_between_hit = 500
+duration_prop_hit = 500
+duration_between_range_attack = 500
+duration_prep_range_attack = 500
 type = 1
 damage = 20
 health = 200
 damage_gun_shot = 5.0
 duration_ground = 500.0
 flight_speed = 120.0
-speed = 25.0
+speed = 35.0
 knockdown_intensity = 80.0
 knockback_intensity = 50.0
 

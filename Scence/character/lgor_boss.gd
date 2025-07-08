@@ -3,8 +3,10 @@ extends Character
 @export var player : Player
 @export var duration_between_attack : int
 @export var duration_vulnerable : int
-const DISTANCE_FROM_PLAYER = 30
-const GROUND_FRICTION = 50
+@export var left_wall: AnimatableBody2D 
+@export var right_wall: AnimatableBody2D 
+const DISTANCE_FROM_PLAYER = 25
+const GROUND_FRICTION = 80
 var knockback_force = Vector2.ZERO
 var death_flag = false
 var time_last_attack = Time.get_ticks_msec()
@@ -94,6 +96,8 @@ func on_emit_damage(damager_receiver: DamageReceiver) -> void:
 	state = State.IDLE
 
 func  is_attacking() -> bool:
+	if (heading == Vector2.RIGHT and global_position.x < left_wall.global_position.x + 10) or (heading == Vector2.LEFT and global_position.x > right_wall.global_position.x - 10):
+		return false
 	return [State.FLY].has(state)
 
 func handle_death(delta: float) -> void:

@@ -5,7 +5,7 @@
 
 [node name="ThugEnemy" instance=ExtResource("1_qe4a0")]
 type = 3
-damage_gun_shot = 10.0
+damage_gun_shot = 20.0
 duration_ground = 700.0
 flight_speed = 100.0
 knockback_intensity = 20.0

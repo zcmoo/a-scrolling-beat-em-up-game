@@ -5,8 +5,8 @@
 
 [node name="Goonenemy" instance=ExtResource("1_7av36")]
 type = 2
-damage = 5
-damage_gun_shot = 10.0
+damage = 10
+damage_gun_shot = 20.0
 duration_ground = 700.0
 knockback_intensity = 20.0
 can_resqawn_knives = true

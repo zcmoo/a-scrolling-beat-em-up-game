@@ -1,9 +1,21 @@
 class_name Data
 extends Resource
-@export var type: Character.Type
-@export var global_position: Vector2
+const DROP_HEIGHT = 50
+var global_position: Vector2
+var type: Character.Type
+var state : Character.State
+var height : int
 
 
 func _init(character_type: Character.Type = Character.Type.PUNK, postion: Vector2 = Vector2.ZERO) -> void:
 	type = character_type
-	global_position = postion
+	if postion.y < 0:
+		height = DROP_HEIGHT
+		global_position = postion + Vector2.DOWN * height
+		state = Character.State.DROP
+	else:
+		global_position = postion
+		state = Character.State.IDLE
+		
+	
+	

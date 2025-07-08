@@ -1,5 +1,7 @@
 extends Node2D
 @export var player: Player
+@export var left_wall: AnimatableBody2D 
+@export var right_wall: AnimatableBody2D 
 const SHOT_PREFAB = preload("res://Scence/props/shot.tscn")
 const PREB_MAP = {
 	COllectible.Type.KNIFE : preload("res://Scence/props/knife.tscn"),
@@ -11,10 +13,11 @@ const ENEMY_MAP = {
 	Character.Type.GOON : preload("res://Scence/character/gooenemy.tscn"),
 	Character.Type.THUG : preload("res://Scence/character/thug_enemy.tscn"),
 	Character.Type.BOSS : preload("res://Scence/character/lgor_boss.tscn"),
-}	
+}
 
 
-func _ready() -> void:
+func _init() -> void:
+	EntityManager.ofphan_actor.connect(on_ofphan_actor.bind())
 	EntityManager.sqawn_collectible.connect(on_spawn_colletible.bind())
 	EntityManager.sqawn_shot.connect(on_spawn_shot.bind())
 	EntityManager.spawn_enemy.connect(on_spawn_enemy.bind())
@@ -37,8 +40,16 @@ func on_spawn_shot(gun_root_postion: Vector2, distance_traveled: float, height: 
 func on_spawn_enemy(enemy_data: Data) -> void:
 	var enemy: Character = ENEMY_MAP[enemy_data.type].instantiate()
 	enemy.global_position = enemy_data.global_position
+	enemy.height = enemy_data.height
+	enemy.state = enemy_data.state
 	enemy.player = player
+	if enemy_data.type == Character.Type.BOSS:
+		enemy.left_wall = left_wall
+		enemy.right_wall = right_wall
 	add_child(enemy)
-	
 
+func on_ofphan_actor(ofphan: Node2D) -> void:
+	ofphan.reparent(self)
+	
+	
 	

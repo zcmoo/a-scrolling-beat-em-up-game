@@ -1,13 +1,11 @@
-[gd_scene load_steps=14 format=3 uid="uid://cilxw70jli3sv"]
+[gd_scene load_steps=12 format=3 uid="uid://cilxw70jli3sv"]
 
 [ext_resource type="Script" uid="uid://dyb71d2grjfam" path="res://world.gd" id="1_tlwt5"]
-[ext_resource type="PackedScene" uid="uid://dacf2ntveqeik" path="res://Scence/props/barrel.tscn" id="2_aqk2v"]
 [ext_resource type="PackedScene" uid="uid://d00gae1hbcdkv" path="res://Scence/character/player.tscn" id="2_fj7yv"]
 [ext_resource type="Script" uid="uid://u4dqmxyh7ev1" path="res://camera_2d.gd" id="3_dwbse"]
 [ext_resource type="PackedScene" uid="uid://c5788vi08ltf0" path="res://Scence/stage/check_point.tscn" id="3_wse8f"]
 [ext_resource type="Script" uid="uid://gqqwxrfmrhem" path="res://actor_container.gd" id="4_ioo17"]
 [ext_resource type="PackedScene" uid="uid://soipbbb4tt4t" path="res://Scence/character/basic_enemy.tscn" id="5_036b0"]
-[ext_resource type="PackedScene" uid="uid://d27hpr8qe6nyq" path="res://Scence/props/knife.tscn" id="7_pkg7o"]
 [ext_resource type="PackedScene" uid="uid://cobgxx2p78jm3" path="res://Scence/character/thug_enemy.tscn" id="10_wse8f"]
 [ext_resource type="PackedScene" uid="uid://t8r2cfoijjmi" path="res://Scence/character/lgor_boss.tscn" id="11_ic0uy"]
 [ext_resource type="PackedScene" uid="uid://c7xnk7oyaqfv5" path="res://Scence/stage/stage_01_street.tscn" id="11_k3n1d"]
@@ -21,47 +19,49 @@ size = Vector2(7, 73)
 [node name="world" type="Node2D"]
 script = ExtResource("1_tlwt5")
 
-[node name="Stage-Street" parent="." instance=ExtResource("11_k3n1d")]
+[node name="Stage-01-Street" parent="." instance=ExtResource("11_k3n1d")]
 
-[node name="Goonenemy" parent="Stage-Street/Checkpoints/CheckPoint/enemies" index="0"]
-position = Vector2(22, 60)
-type = 2
-speed = 15.0
+[node name="BasicEnemy" parent="Stage-01-Street/Checkpoints/CheckPoint/enemies" index="0" instance=ExtResource("5_036b0")]
+position = Vector2(8, -2)
 
-[node name="Goonenemy2" parent="Stage-Street/Checkpoints/CheckPoint/enemies" index="1"]
-type = 2
-speed = 15.0
+[node name="BasicEnemy2" parent="Stage-01-Street/Checkpoints/CheckPoint/enemies" index="1" instance=ExtResource("5_036b0")]
+position = Vector2(70, -4)
 
-[node name="Goonenemy3" parent="Stage-Street/Checkpoints/CheckPoint/enemies" index="2"]
-position = Vector2(19, 32)
-type = 2
-speed = 15.0
+[node name="BasicEnemy3" parent="Stage-01-Street/Checkpoints/CheckPoint/enemies" index="2" instance=ExtResource("5_036b0")]
+position = Vector2(34, -4)
 
-[node name="BasicEnemy" parent="Stage-Street/Checkpoints/CheckPoint/enemies" index="3"]
-position = Vector2(76, 35)
+[node name="lgor Boss" parent="Stage-01-Street/Checkpoints/CheckPoint/enemies" index="3" instance=ExtResource("11_ic0uy")]
+position = Vector2(110, 85)
 
-[node name="CheckPoint2" parent="Stage-Street/Checkpoints" index="1" instance=ExtResource("3_wse8f")]
-position = Vector2(210, 0)
+[node name="CheckPoint2" parent="Stage-01-Street/Checkpoints" index="1" instance=ExtResource("3_wse8f")]
+position = Vector2(237, 0)
 
-[node name="ThugEnemy" parent="Stage-Street/Checkpoints/CheckPoint2/enemies" index="0" instance=ExtResource("10_wse8f")]
-position = Vector2(74, 33)
+[node name="ThugEnemy" parent="Stage-01-Street/Checkpoints/CheckPoint2/enemies" index="0" instance=ExtResource("10_wse8f")]
+position = Vector2(36, 87)
 
-[node name="lgor Boss" parent="Stage-Street/Checkpoints/CheckPoint2/enemies" index="1" instance=ExtResource("11_ic0uy")]
-position = Vector2(71, 53)
+[node name="BasicEnemy" parent="Stage-01-Street/Checkpoints/CheckPoint2/enemies" index="1" instance=ExtResource("5_036b0")]
+position = Vector2(68, 0)
 
-[node name="BasicEnemy" parent="Stage-Street/Checkpoints/CheckPoint2/enemies" index="2" instance=ExtResource("5_036b0")]
-position = Vector2(47, 40)
+[node name="lgor Boss" parent="Stage-01-Street/Checkpoints/CheckPoint2/enemies" index="2" instance=ExtResource("11_ic0uy")]
+position = Vector2(109, 85)
+
+[node name="ThugEnemy2" parent="Stage-01-Street/Checkpoints/CheckPoint2/enemies" index="3" instance=ExtResource("10_wse8f")]
+position = Vector2(27, -4)
+
+[node name="Barrel2" parent="Stage-01-Street/Containers" index="1"]
+position = Vector2(211, 43)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(50, 32)
+position_smoothing_enabled = true
+position_smoothing_speed = 3.0
 script = ExtResource("3_dwbse")
 
 [node name="InvisibleWalls" type="Node2D" parent="Camera2D"]
 position = Vector2(-50, -32)
 
 [node name="Leftwall" type="AnimatableBody2D" parent="Camera2D/InvisibleWalls"]
-unique_name_in_owner = true
 position = Vector2(0, 33)
 collision_layer = 128
 collision_mask = 0
@@ -71,7 +71,6 @@ sync_to_physics = false
 shape = SubResource("RectangleShape2D_036b0")
 
 [node name="Rightwall" type="AnimatableBody2D" parent="Camera2D/InvisibleWalls"]
-unique_name_in_owner = true
 position = Vector2(100, 35)
 collision_layer = 128
 collision_mask = 0
@@ -81,16 +80,19 @@ sync_to_physics = false
 position = Vector2(0, -0.5)
 shape = SubResource("RectangleShape2D_dwbse")
 
-[node name="ActorContainer" type="Node2D" parent="." node_paths=PackedStringArray("player")]
+[node name="ActorContainer" type="Node2D" parent="." node_paths=PackedStringArray("player", "left_wall", "right_wall")]
 y_sort_enabled = true
 script = ExtResource("4_ioo17")
 player = NodePath("player")
+left_wall = NodePath("../Camera2D/InvisibleWalls/Leftwall")
+right_wall = NodePath("../Camera2D/InvisibleWalls/Rightwall")
 
 [node name="player" parent="ActorContainer" instance=ExtResource("2_fj7yv")]
 unique_name_in_owner = true
 position = Vector2(41, 45)
 max_duration_between_successful_hit = 2000
 can_respawn = true
+damage = 20
 health = 500
 damage_power = 20
 damage_gun_shot = 300.0
@@ -101,20 +103,9 @@ knockdown_intensity = 80.0
 knockback_intensity = 20.0
 autodestroy_on_drop = true
 
-[node name="Barrel" parent="ActorContainer" instance=ExtResource("2_aqk2v")]
-position = Vector2(88, 49)
-content_type = 2
-
-[node name="Barrel2" parent="ActorContainer" instance=ExtResource("2_aqk2v")]
-position = Vector2(18, 45)
-content_type = 1
-
-[node name="knife" parent="ActorContainer" instance=ExtResource("7_pkg7o")]
-position = Vector2(79, 60)
-
-[editable path="Stage-Street"]
-[editable path="Stage-Street/Checkpoints/CheckPoint"]
-[editable path="Stage-Street/Checkpoints/CheckPoint2"]
+[editable path="Stage-01-Street"]
+[editable path="Stage-01-Street/Checkpoints/CheckPoint"]
+[editable path="Stage-01-Street/Checkpoints/CheckPoint2"]
 [editable path="ActorContainer/player"]
 [editable path="ActorContainer/player/DamageEmiter"]
 [editable path="ActorContainer/player/DamageReceiver"]

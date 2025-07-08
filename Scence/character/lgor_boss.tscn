@@ -182,18 +182,17 @@ size = Vector2(6, 6)
 
 [node name="lgor Boss" instance=ExtResource("1_53ywu")]
 collision_layer = 4
-collision_mask = 9
 script = ExtResource("2_hjetx")
 duration_between_attack = 1500
-duration_vulnerable = 1500
+duration_vulnerable = 500
 type = 4
-damage = 50
-health = 500
+damage = 20
+health = 300
 duration_ground = 1500.0
-flight_speed = 90.0
-speed = 20.0
+flight_speed = 80.0
+speed = 35.0
 knockdown_intensity = 100.0
-knockback_intensity = 20.0
+knockback_intensity = 10.0
 
 [node name="CharacterSprite" parent="." index="1"]
 texture = ExtResource("2_0sdnn")
