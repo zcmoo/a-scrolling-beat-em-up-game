@@ -1,7 +1,8 @@
 extends Node2D
 @export var player: Player
 @export var left_wall: AnimatableBody2D 
-@export var right_wall: AnimatableBody2D 
+@export var right_wall: AnimatableBody2D
+var doors: Array[Door] = []
 const SHOT_PREFAB = preload("res://Scence/props/shot.tscn")
 const PREB_MAP = {
 	COllectible.Type.KNIFE : preload("res://Scence/props/knife.tscn"),
@@ -46,9 +47,13 @@ func on_spawn_enemy(enemy_data: Data) -> void:
 	if enemy_data.type == Character.Type.BOSS:
 		enemy.left_wall = left_wall
 		enemy.right_wall = right_wall
+	if enemy_data.door_index > -1:
+		enemy.assign_door(doors[enemy_data.door_index])	
 	add_child(enemy)
 
 func on_ofphan_actor(ofphan: Node2D) -> void:
+	if ofphan is Door:
+		doors.append(ofphan)
 	ofphan.reparent(self)
 	
 	

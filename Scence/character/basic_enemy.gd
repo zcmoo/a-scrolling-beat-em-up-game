@@ -5,6 +5,7 @@ extends Character
 @export var duration_prop_hit : int
 @export var duration_between_range_attack : int
 @export var duration_prep_range_attack : int
+var assigned_door_index = -1
 var player_slot : EnemySlot = null
 var has_slot : bool = false
 var time_since_last_hit = Time.get_ticks_msec()
@@ -104,3 +105,9 @@ func handle_pre_shoot() -> void:
 	if state == State.PRE_SHOOT and (Time.get_ticks_msec() - time_since_prep_range_attack > duration_prep_range_attack):
 		shoot_gun()
 		time_since_last_range_attack = Time.get_ticks_msec()
+
+func assign_door(door: Door) -> void:
+	if door.state != Door.State.OPENED:
+		state = State.WAITING
+		door.open()
+		door.opened.connect(on_action_complete.bind())

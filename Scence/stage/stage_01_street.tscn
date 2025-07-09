@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://c7xnk7oyaqfv5"]
+[gd_scene load_steps=5 format=3 uid="uid://c7xnk7oyaqfv5"]
 
 [ext_resource type="PackedScene" uid="uid://xtj44mfkw662" path="res://Scence/stage/stage.tscn" id="1_epbx8"]
 [ext_resource type="PackedScene" uid="uid://c5788vi08ltf0" path="res://Scence/stage/check_point.tscn" id="2_qylii"]
+[ext_resource type="PackedScene" uid="uid://jmsh38r5a642" path="res://Scence/props/door.tscn" id="4_nphe1"]
 [ext_resource type="PackedScene" uid="uid://dacf2ntveqeik" path="res://Scence/props/barrel.tscn" id="5_8on0n"]
 
 [node name="Stage-01-Street" instance=ExtResource("1_epbx8")]
@@ -15,5 +16,7 @@ content_type = 2
 
 [node name="Barrel2" parent="Containers" index="1" instance=ExtResource("5_8on0n")]
 content_type = 1
+
+[node name="Door" parent="Doors" index="0" instance=ExtResource("4_nphe1")]
 
 [editable path="Checkpoints/CheckPoint"]

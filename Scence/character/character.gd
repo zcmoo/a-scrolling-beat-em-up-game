@@ -32,7 +32,7 @@ extends CharacterBody2D
 @onready var collectible_sensor : Area2D = $CollectibleSensor
 @onready var weapon_postion : Node2D = $KnifeSprite/WeaponPostion 
 @onready var gun_sprite : Sprite2D = $GunSprite
-enum State {IDLE, WALK, ATTACK, TAKE_OFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUND, DEATH, FLY, PREP_ATTACK, THROW, PICK_UP, SHOOT, PRE_SHOOT, RECOVER, DROP}
+enum State {IDLE, WALK, ATTACK, TAKE_OFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUND, DEATH, FLY, PREP_ATTACK, THROW, PICK_UP, SHOOT, PRE_SHOOT, RECOVER, DROP, WAITING}
 enum Type {PLAYER, PUNK, GOON, THUG, BOSS}
 const GRAVITY = 500
 var state = State.IDLE
@@ -66,7 +66,8 @@ var animation_map : Dictionary = {
 	State.SHOOT : "shoot",
 	State.PRE_SHOOT : "idle",
 	State.RECOVER : "recover",
-	State.DROP : "idle"
+	State.DROP : "idle",
+	State.WAITING : "idle"
 }
 
 

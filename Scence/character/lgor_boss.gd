@@ -11,6 +11,7 @@ var knockback_force = Vector2.ZERO
 var death_flag = false
 var time_last_attack = Time.get_ticks_msec()
 var time_start_vulnerable = Time.get_ticks_msec()
+var assigned_door_index = -1
 
 
 func _process(delta: float) -> void:

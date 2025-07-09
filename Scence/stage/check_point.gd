@@ -11,9 +11,6 @@ var activated_enemies_count = 0
 func _ready() -> void:
 	player_detetion_area.body_entered.connect(on_player_enter.bind())
 	EntityManager.death_enemy.connect(on_enemy_death.bind())
-	for enemy: Character in enemies.get_children():
-		enemy_data.append(Data.new(enemy.type, enemy.global_position))
-		enemies.queue_free()
 
 func _process(delta: float) -> void:
 	if is_activate and can_spawn_enemies():
@@ -35,3 +32,8 @@ func on_enemy_death(enemy: Character) -> void:
 	if activated_enemies_count == 0 and enemy_data.size() == 0:
 		StageManager.checkpoint_complete.emit()
 		queue_free()
+
+func creat_enemy_data() -> void:
+	for enemy: Character in enemies.get_children():
+		enemy_data.append(Data.new(enemy.type, enemy.global_position, enemy.assigned_door_index))
+		enemies.queue_free()
