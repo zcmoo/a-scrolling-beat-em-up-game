@@ -1,11 +1,13 @@
-[gd_scene load_steps=13 format=3 uid="uid://cilxw70jli3sv"]
+[gd_scene load_steps=15 format=3 uid="uid://cilxw70jli3sv"]
 
 [ext_resource type="Script" uid="uid://dyb71d2grjfam" path="res://world.gd" id="1_tlwt5"]
 [ext_resource type="PackedScene" uid="uid://d00gae1hbcdkv" path="res://Scence/character/player.tscn" id="2_fj7yv"]
+[ext_resource type="PackedScene" uid="uid://ducjp4lg3ak2f" path="res://UI/ui.tscn" id="2_ic0uy"]
 [ext_resource type="Script" uid="uid://u4dqmxyh7ev1" path="res://camera_2d.gd" id="3_dwbse"]
 [ext_resource type="PackedScene" uid="uid://c5788vi08ltf0" path="res://Scence/stage/check_point.tscn" id="3_wse8f"]
 [ext_resource type="Script" uid="uid://gqqwxrfmrhem" path="res://actor_container.gd" id="4_ioo17"]
 [ext_resource type="PackedScene" uid="uid://soipbbb4tt4t" path="res://Scence/character/basic_enemy.tscn" id="5_036b0"]
+[ext_resource type="PackedScene" uid="uid://t8r2cfoijjmi" path="res://Scence/character/lgor_boss.tscn" id="7_k3n1d"]
 [ext_resource type="PackedScene" uid="uid://jmsh38r5a642" path="res://Scence/props/door.tscn" id="10_ic0uy"]
 [ext_resource type="PackedScene" uid="uid://cobgxx2p78jm3" path="res://Scence/character/thug_enemy.tscn" id="10_wse8f"]
 [ext_resource type="Texture2D" uid="uid://btaqoc3xirh2m" path="res://assets/assets/art/props/garage-door-opened.png" id="11_2o6r5"]
@@ -19,6 +21,9 @@ size = Vector2(7, 73)
 
 [node name="world" type="Node2D"]
 script = ExtResource("1_tlwt5")
+
+[node name="UI" parent="." instance=ExtResource("2_ic0uy")]
+duration_health_visible = 1000
 
 [node name="Stage-01-Street" parent="." instance=ExtResource("11_k3n1d")]
 
@@ -41,6 +46,9 @@ position = Vector2(7, 19)
 
 [node name="ThugEnemy" parent="Stage-01-Street/Checkpoints/CheckPoint/enemies" index="2" instance=ExtResource("10_wse8f")]
 position = Vector2(6, 20)
+
+[node name="lgor Boss" parent="Stage-01-Street/Checkpoints/CheckPoint/enemies" index="3" instance=ExtResource("7_k3n1d")]
+position = Vector2(8, 79)
 
 [node name="CheckPoint2" parent="Stage-01-Street/Checkpoints" index="1" instance=ExtResource("3_wse8f")]
 position = Vector2(237, 0)
@@ -110,7 +118,7 @@ position = Vector2(41, 45)
 max_duration_between_successful_hit = 2000
 can_respawn = true
 damage = 20
-health = 500
+health = 300
 damage_power = 20
 damage_gun_shot = 300.0
 max_ammo_per_gun = 5
@@ -120,6 +128,8 @@ knockdown_intensity = 80.0
 knockback_intensity = 20.0
 autodestroy_on_drop = true
 
+[editable path="UI"]
+[editable path="UI/UIContainer/EnemyHeathBar"]
 [editable path="Stage-01-Street"]
 [editable path="Stage-01-Street/Checkpoints/CheckPoint"]
 [editable path="Stage-01-Street/Checkpoints/CheckPoint2"]

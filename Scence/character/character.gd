@@ -32,7 +32,7 @@ extends CharacterBody2D
 @onready var collectible_sensor : Area2D = $CollectibleSensor
 @onready var weapon_postion : Node2D = $KnifeSprite/WeaponPostion 
 @onready var gun_sprite : Sprite2D = $GunSprite
-enum State {IDLE, WALK, ATTACK, TAKE_OFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUND, DEATH, FLY, PREP_ATTACK, THROW, PICK_UP, SHOOT, PRE_SHOOT, RECOVER, DROP, WAITING}
+enum State {IDLE, WALK, ATTACK, TAKE_OFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUND, DEATH, FLY, PREP_ATTACK, THROW, PICK_UP, SHOOT, PRE_SHOOT, RECOVER, DROP, WAITING, APPEARING}
 enum Type {PLAYER, PUNK, GOON, THUG, BOSS}
 const GRAVITY = 500
 var state = State.IDLE
@@ -67,7 +67,8 @@ var animation_map : Dictionary = {
 	State.PRE_SHOOT : "idle",
 	State.RECOVER : "recover",
 	State.DROP : "idle",
-	State.WAITING : "idle"
+	State.WAITING : "idle",
+	State.APPEARING : "idle"
 }
 
 
@@ -78,7 +79,7 @@ func _ready() -> void:
 	damage_receciver.damage_receive.connect(on_rececive_damage.bind())
 	collater_damage_emiter.area_entered.connect(on_emit_collateral_damage.bind())
 	collater_damage_emiter.body_entered.connect(on_wall_hit.bind())
-	current_health = health
+	set_health(health, type == Character.Type.PLAYER)
 # 游戏主循环中处理人物更新逻辑
 func _process(delta: float) -> void:
 	setup_collisions()
@@ -221,7 +222,7 @@ func on_rececive_damage(damage: int, directinon: Vector2, hi_type: DamageReceive
 		if has_gun:
 			has_gun = false
 			EntityManager.sqawn_collectible.emit(COllectible.Type.GUN, COllectible.State.FALL, global_position, Vector2.ZERO, 0.0, autodestroy_on_drop)
-		current_health = clamp(current_health - damage, 0, health)
+		set_health(current_health - damage)
 		if current_health == 0 or hi_type == DamageReceiver.HIType.KNOCKDOWN:
 			state = State.FALL
 			height_speed = knockdown_intensity
@@ -312,9 +313,7 @@ func pickup_collectible() -> void:
 			has_gun = true
 			ammo_left = max_ammo_per_gun
 		if collectible.type == COllectible.Type.FOOD:
-			print(current_health)
-			current_health = health
-			print(current_health)
+			set_health(health)
 		collectible.queue_free()
 
 func shoot_gun() -> void:
@@ -329,3 +328,8 @@ func shoot_gun() -> void:
 	var weapon_height = -weapon_postion.position.y
 	var distance = target_point.x - weapon_postion.global_position.x
 	EntityManager.sqawn_shot.emit(weapon_root_position, distance, weapon_height)
+
+func set_health(health_now: int, emit_signal: bool = true) -> void:
+	current_health = clamp(health_now, 0, health)
+	if emit_signal:
+		DamageManager.health_change.emit(type, current_health, health)

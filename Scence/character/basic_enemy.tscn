@@ -486,6 +486,7 @@ duration_between_hit = 500
 duration_prop_hit = 500
 duration_between_range_attack = 500
 duration_prep_range_attack = 500
+duration_appear = 1000.0
 type = 1
 damage = 20
 health = 200

@@ -5,6 +5,7 @@ extends Character
 @export var duration_prop_hit : int
 @export var duration_between_range_attack : int
 @export var duration_prep_range_attack : int
+@export var duration_appear : float
 var assigned_door_index = -1
 var player_slot : EnemySlot = null
 var has_slot : bool = false
@@ -12,7 +13,9 @@ var time_since_last_hit = Time.get_ticks_msec()
 var time_since_prop_hit = Time.get_ticks_msec()
 var time_since_prep_range_attack = Time.get_ticks_msec()
 var time_since_last_range_attack = Time.get_ticks_msec()
+var time_since_start_appearing = Time.get_ticks_msec()
 const EDGE_SCREEN_BUFFER = 10
+
 
 func _ready() -> void:
 	super._ready()
@@ -111,3 +114,20 @@ func assign_door(door: Door) -> void:
 		state = State.WAITING
 		door.open()
 		door.opened.connect(on_action_complete.bind())
+	else:
+		state = State.APPEARING
+		modulate.a = 0
+		time_since_start_appearing = Time.get_ticks_msec()
+
+func _process(delta: float) -> void:
+	super._process(delta)
+	process_appear()
+
+func process_appear() -> void:
+	if state == State.APPEARING:
+		var progress = (Time.get_ticks_msec() - time_since_start_appearing) / duration_appear
+		if progress < 1:
+			modulate.a = progress
+		else:
+			modulate.a = 1
+			state = State.IDLE

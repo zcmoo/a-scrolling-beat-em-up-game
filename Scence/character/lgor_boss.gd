@@ -60,7 +60,7 @@ func on_rececive_damage(damage: int, directinon: Vector2, hi_type: DamageReceive
 	if not is_vulnerable():
 		knockback_force = directinon * knockback_intensity
 		return 
-	current_health = clamp(current_health - damage, 0, health)
+	set_health(current_health - damage)
 	if current_health == 0:
 		EntityManager.death_enemy.emit(self)
 		state = State.FALL
