@@ -1,0 +1,51 @@
+[gd_scene load_steps=11 format=3 uid="uid://2h32n2kwdkeb"]
+
+[ext_resource type="AudioStream" uid="uid://dcfcsx7ug8q1m" path="res://assets/assets/sfx/click.wav" id="1_6jdv3"]
+[ext_resource type="Script" uid="uid://bhbbj07thbwik" path="res://utils/sound_manager.gd" id="1_rvkdu"]
+[ext_resource type="AudioStream" uid="uid://bi1x1g3gmrvci" path="res://assets/assets/sfx/eat-food.wav" id="2_rvkdu"]
+[ext_resource type="AudioStream" uid="uid://dswhwyik35vp0" path="res://assets/assets/sfx/gogogo.wav" id="3_smdck"]
+[ext_resource type="AudioStream" uid="uid://bljekk5cnpa0x" path="res://assets/assets/sfx/grunt.wav" id="4_vraha"]
+[ext_resource type="AudioStream" uid="uid://ckfvxik6lskr1" path="res://assets/assets/sfx/gunshot.wav" id="5_0unlo"]
+[ext_resource type="AudioStream" uid="uid://b8cp1vix5iiie" path="res://assets/assets/sfx/hit-1.wav" id="6_kqk87"]
+[ext_resource type="AudioStream" uid="uid://dtkr2m5n21abf" path="res://assets/assets/sfx/hit-2.wav" id="7_mtfh1"]
+[ext_resource type="AudioStream" uid="uid://cnegrur46vsq0" path="res://assets/assets/sfx/knife-hit.wav" id="8_ofl58"]
+[ext_resource type="AudioStream" uid="uid://du45n4qjgtsxq" path="res://assets/assets/sfx/miss.wav" id="9_fai7g"]
+
+[node name="SoundPlayer" type="Node"]
+script = ExtResource("1_rvkdu")
+
+[node name="click" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("1_6jdv3")
+bus = &"SFX"
+
+[node name="eat-food" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_rvkdu")
+bus = &"SFX"
+
+[node name="gogogo" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_smdck")
+bus = &"SFX"
+
+[node name="grunt" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_vraha")
+bus = &"SFX"
+
+[node name="gunshot" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_0unlo")
+bus = &"SFX"
+
+[node name="hit-1" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_kqk87")
+bus = &"SFX"
+
+[node name="hit-2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_mtfh1")
+bus = &"SFX"
+
+[node name="knife-hit" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_ofl58")
+bus = &"SFX"
+
+[node name="miss" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_fai7g")
+bus = &"SFX"

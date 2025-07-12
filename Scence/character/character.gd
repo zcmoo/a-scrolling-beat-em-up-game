@@ -192,6 +192,7 @@ func on_action_complete() -> void:
 func on_take_off_complete() -> void:
 	state = State.JUMP
 	height_speed = jump_intensity
+	SoundPlayer.play(SoundManager.Sound.MISS)
 # 当着陆的动画播放完后的回调函数
 func on_land_complete() -> void:
 	state = State.IDLE
@@ -223,13 +224,16 @@ func on_rececive_damage(damage: int, directinon: Vector2, hi_type: DamageReceive
 			has_gun = false
 			EntityManager.sqawn_collectible.emit(COllectible.Type.GUN, COllectible.State.FALL, global_position, Vector2.ZERO, 0.0, autodestroy_on_drop)
 		set_health(current_health - damage)
+		SoundPlayer.play(SoundManager.Sound.HIT2, true)
 		if current_health == 0 or hi_type == DamageReceiver.HIType.KNOCKDOWN:
 			state = State.FALL
 			height_speed = knockdown_intensity
 			velocity = directinon * knockback_intensity
+			DamageManager.heavy_below_rececived.emit()
 		elif hi_type == DamageReceiver.HIType.POWER:
 			state = State.FLY
 			velocity = directinon * flight_speed
+			DamageManager.heavy_below_rececived.emit()
 		else:
 			state = State.HURT
 			velocity = directinon * knockback_intensity
@@ -254,6 +258,7 @@ func on_wall_hit(wall: AnimatableBody2D) -> void:
 	state = State.FALL
 	height_speed = knockdown_intensity
 	velocity = -velocity / 2.0
+	DamageManager.heavy_below_rececived.emit()
 # 处理敌人被连招击飞后与其它敌人相撞后的动作
 func on_emit_collateral_damage(reciever: DamageReceiver) -> void:
 	if reciever != damage_receciver:
@@ -274,6 +279,7 @@ func on_throw_complete() -> void:
 		has_gun = false
 	else:
 		has_knife = false
+	SoundPlayer.play(SoundManager.Sound.MISS)
 	var collectible_global_postion = Vector2(weapon_postion.global_position.x, global_position.y)
 	var collectible_height = -weapon_postion.position.y
 	EntityManager.sqawn_collectible.emit(collect_type, COllectible.State.FLY, collectible_global_postion, heading, collectible_height, false)
@@ -309,11 +315,14 @@ func pickup_collectible() -> void:
 		var collectible : COllectible = collectible_area[0]
 		if collectible.type == COllectible.Type.KNIFE and not has_knife:
 			has_knife = true
+			SoundPlayer.play(SoundManager.Sound.MISS)
 		if collectible.type == COllectible.Type.GUN and not has_gun	:
 			has_gun = true
+			SoundPlayer.play(SoundManager.Sound.MISS)
 			ammo_left = max_ammo_per_gun
 		if collectible.type == COllectible.Type.FOOD:
 			set_health(health)
+			SoundPlayer.play(SoundManager.Sound.FOOD)
 		collectible.queue_free()
 
 func shoot_gun() -> void:
@@ -324,6 +333,7 @@ func shoot_gun() -> void:
 	if target != null:
 		target_point = raycast.get_collision_point()
 		target.on_rececive_damage(damage_gun_shot, heading, DamageReceiver.HIType.KNOCKDOWN)
+	SoundPlayer.play(SoundManager.Sound.GUN)
 	var weapon_root_position = Vector2(weapon_postion.global_position.x, position.y)
 	var weapon_height = -weapon_postion.position.y
 	var distance = target_point.x - weapon_postion.global_position.x

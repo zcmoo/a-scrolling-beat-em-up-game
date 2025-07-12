@@ -4,6 +4,7 @@ extends Node2D
 @export var right_wall: AnimatableBody2D
 var doors: Array[Door] = []
 const SHOT_PREFAB = preload("res://Scence/props/shot.tscn")
+const SPARK_PREFAB = preload("res://Scence/props/spark.tscn")
 const PREB_MAP = {
 	COllectible.Type.KNIFE : preload("res://Scence/props/knife.tscn"),
 	COllectible.Type.GUN : preload("res://Scence/props/gun.tscn"),
@@ -22,6 +23,7 @@ func _init() -> void:
 	EntityManager.sqawn_collectible.connect(on_spawn_colletible.bind())
 	EntityManager.sqawn_shot.connect(on_spawn_shot.bind())
 	EntityManager.spawn_enemy.connect(on_spawn_enemy.bind())
+	EntityManager.spawn_park.connect(on_spawn_spark.bind())
 
 func on_spawn_colletible(type: COllectible.Type, initial_state: COllectible.State, collectible_globle_postion: Vector2, collectible_direction: Vector2, initial_height: float, auto_distroy: bool) -> void:
 	var collectible: COllectible = PREB_MAP[type].instantiate()
@@ -56,5 +58,7 @@ func on_ofphan_actor(ofphan: Node2D) -> void:
 		doors.append(ofphan)
 	ofphan.reparent(self)
 	
-	
-	
+func on_spawn_spark(spark_postion: Vector2) -> void:
+	var spark_instance = SPARK_PREFAB.instantiate()
+	spark_instance.position = spark_postion
+	add_child(spark_instance)

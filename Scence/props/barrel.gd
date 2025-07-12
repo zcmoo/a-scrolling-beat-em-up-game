@@ -27,6 +27,7 @@ func on_rececive_damage(damage: int, direction: Vector2, hi_type: DamageReceiver
 		state = State.DESTORYED
 		velocity = direction * knockback_intensity
 		EntityManager.sqawn_collectible.emit(content_type, COllectible.State.FALL, global_position, Vector2.ZERO, 0.0, false)
+		SoundPlayer.play(SoundManager.Sound.HIT1, true)
 # 处理油箱在空气中受到重力影响并调整可见度，如果油箱落地将他从场景树中移除
 func handle_air_time(delta: float) -> void:
 	if state == State.DESTORYED:

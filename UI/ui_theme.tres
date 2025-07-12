@@ -1,0 +1,8 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://bf3kkfbng2xnu"]
+
+[ext_resource type="FontFile" uid="uid://bxwyrjjwgbirv" path="res://assets/assets/fonts/my 3x5 tiny mono pixel font.ttf" id="1_touxu"]
+
+[resource]
+default_font = ExtResource("1_touxu")
+default_font_size = 6
+Label/colors/font_color = Color(0.815686, 0.815686, 0, 1)

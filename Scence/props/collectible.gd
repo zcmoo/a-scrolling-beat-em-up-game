@@ -59,6 +59,7 @@ func handle_animation() -> void:
 
 func on_emit_damage(reciver: DamageReceiver) -> void:
 	reciver.damage_receive.emit(damage, direction, DamageReceiver.HIType.KNOCKDOWN)
+	EntityManager.spawn_park.emit(self.position)
 	queue_free()
 
 func on_exit_screen(_wall: AnimatableBody2D) -> void:

@@ -28,6 +28,10 @@ func handle_input() -> void:
 		elif has_gun:
 			if ammo_left > 0:
 				shoot_gun()
+				if self.heading == Vector2.RIGHT:
+					EntityManager.spawn_park.emit(self.position + Vector2(25, 0))
+				else:
+					EntityManager.spawn_park.emit(self.position + Vector2(-25, 0))
 				ammo_left -= 1
 			else:
 				state = State.THROW
@@ -36,6 +40,7 @@ func handle_input() -> void:
 				state = State.PICK_UP
 			else:
 				state = State.ATTACK
+				SoundPlayer.play(SoundManager.Sound.MISS)
 				if is_last_hit_successful:
 					time_since_last_successful_attack = Time.get_ticks_msec()
 					attack_combo_index = (attack_combo_index + 1) % anim_attack.size()
@@ -47,6 +52,7 @@ func handle_input() -> void:
 		attack_combo_index = 0
 	if can_jump_kick() and Input.is_action_just_pressed("attack"):
 		state = State.JUMPKICK
+		SoundPlayer.play(SoundManager.Sound.MISS)
 
 # 给离给定位置最近的敌人占一个位置并返回这个位置
 func reserve_slot(enemy: BaiscEnemy) -> EnemySlot:

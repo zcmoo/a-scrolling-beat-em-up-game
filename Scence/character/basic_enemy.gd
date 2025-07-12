@@ -14,7 +14,7 @@ var time_since_prop_hit = Time.get_ticks_msec()
 var time_since_prep_range_attack = Time.get_ticks_msec()
 var time_since_last_range_attack = Time.get_ticks_msec()
 var time_since_start_appearing = Time.get_ticks_msec()
-const EDGE_SCREEN_BUFFER = 10
+const EDGE_SCREEN_BUFFER = 15
 
 
 func _ready() -> void:
@@ -41,6 +41,9 @@ func goto_melee_postion() -> void:
 # 重写父节点的函数让敌人死后让出给定位置
 func on_rececive_damage(damage: int, directinon: Vector2, hi_type: DamageReceiver.HIType) -> void:
 	super.on_rececive_damage(damage, directinon, hi_type)
+	ComboManager.register_hit.emit()
+	if current_health == 0 or hi_type == DamageReceiver.HIType.POWER:
+		EntityManager.spawn_park.emit(self.position)
 	if current_health <= 0:
 		player.free_slot(self)
 		EntityManager.death_enemy.emit(self)
@@ -107,6 +110,10 @@ func can_range_attack() -> bool:
 func handle_pre_shoot() -> void:
 	if state == State.PRE_SHOOT and (Time.get_ticks_msec() - time_since_prep_range_attack > duration_prep_range_attack):
 		shoot_gun()
+		if self.heading == Vector2.RIGHT:
+			EntityManager.spawn_park.emit(self.position + Vector2(25, 0))
+		else:
+			EntityManager.spawn_park.emit(self.position + Vector2(-25, 0))
 		time_since_last_range_attack = Time.get_ticks_msec()
 
 func assign_door(door: Door) -> void:

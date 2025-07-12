@@ -52,7 +52,7 @@ func set_heading() -> void:
 
 func can_get_hurt() -> bool:
 	return true
-	
+
 func is_vulnerable() -> bool:
 	return state == State.RECOVER
 
@@ -60,9 +60,13 @@ func on_rececive_damage(damage: int, directinon: Vector2, hi_type: DamageReceive
 	if not is_vulnerable():
 		knockback_force = directinon * knockback_intensity
 		return 
+	ComboManager.register_hit.emit()
 	set_health(current_health - damage)
+	SoundPlayer.play(SoundManager.Sound.HIT2, true)
 	if current_health == 0:
+		EntityManager.spawn_park.emit(self.position)
 		EntityManager.death_enemy.emit(self)
+		SoundPlayer.play(SoundManager.Sound.GRUNT)
 		state = State.FALL
 		height_speed = knockdown_intensity
 		velocity = directinon * height_speed

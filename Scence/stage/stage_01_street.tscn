@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dacf2ntveqeik" path="res://Scence/props/barrel.tscn" id="5_8on0n"]
 
 [node name="Stage-01-Street" instance=ExtResource("1_epbx8")]
+music = 2
 
 [node name="CheckPoint" parent="Checkpoints" index="0" instance=ExtResource("2_qylii")]
 position = Vector2(89, 0)

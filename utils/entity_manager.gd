@@ -4,3 +4,4 @@ signal sqawn_shot(gun_root_postion: Vector2, distance_traveled: float, height: f
 signal spawn_enemy(enemy_data: Data)
 signal death_enemy(enemy: Character)
 signal ofphan_actor(orphan: Node2D)
+signal spawn_park(spark_position: Vector2)

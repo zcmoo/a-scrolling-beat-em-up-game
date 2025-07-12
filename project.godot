@@ -20,6 +20,9 @@ config/icon="res://icon.svg"
 EntityManager="*res://utils/entity_manager.gd"
 StageManager="*res://utils/stage_manager.gd"
 DamageManager="*res://utils/damage_manager.gd"
+ComboManager="*res://utils/combo_manager.gd"
+MusicPlayer="*res://utils/music_player.tscn"
+SoundPlayer="*res://utils/sound_player.tscn"
 
 [display]
 

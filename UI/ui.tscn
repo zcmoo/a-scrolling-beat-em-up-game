@@ -1,9 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://ducjp4lg3ak2f"]
+[gd_scene load_steps=9 format=3 uid="uid://ducjp4lg3ak2f"]
 
 [ext_resource type="Texture2D" uid="uid://bwbswvimr3dh" path="res://assets/assets/art/ui/avatars/avatar-punk.png" id="1_2fwl4"]
 [ext_resource type="Script" uid="uid://bdo1yshaffdot" path="res://UI/ui.gd" id="1_hat8c"]
 [ext_resource type="Texture2D" uid="uid://blow221f3s1jb" path="res://assets/assets/art/ui/avatars/avatar-player.png" id="2_dajm1"]
 [ext_resource type="PackedScene" uid="uid://bwr1ox4whk2al" path="res://UI/health_bar.tscn" id="3_e6gg6"]
+[ext_resource type="PackedScene" uid="uid://busxfyuluuwni" path="res://UI/combo_indicator.tscn" id="5_3sbvi"]
+[ext_resource type="PackedScene" uid="uid://c748li4srlohy" path="res://UI/score_indicator.tscn" id="6_nm1m0"]
+[ext_resource type="PackedScene" uid="uid://b70cq14l3o8eg" path="res://UI/flickering_texture_rext.tscn" id="7_c7tqi"]
+[ext_resource type="Texture2D" uid="uid://csmslvlb8tukf" path="res://assets/assets/art/ui/go-go-go.png" id="8_cbfhl"]
 
 [node name="UI" type="CanvasLayer"]
 script = ExtResource("1_hat8c")
@@ -60,5 +64,37 @@ layout_direction = 3
 
 [node name="health_bar" parent="UIContainer/EnemyHeathBar" index="2"]
 layout_direction = 3
+
+[node name="ComboIndicator" parent="UIContainer" instance=ExtResource("5_3sbvi")]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = -6.0
+offset_right = 20.0
+offset_bottom = 0.0
+grow_vertical = 0
+duration_combo_timeout = 2000
+
+[node name="ScoreIndicator" parent="UIContainer" instance=ExtResource("6_nm1m0")]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 1.0
+offset_right = 47.0
+offset_bottom = 7.0
+
+[node name="GoIndicator" parent="UIContainer" instance=ExtResource("7_c7tqi")]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -16.0
+offset_top = 11.0
+offset_right = 0.0
+offset_bottom = 27.0
+grow_horizontal = 0
+texture = ExtResource("8_cbfhl")
+stretch_mode = 2
 
 [editable path="UIContainer/EnemyHeathBar"]
