@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://busxfyuluuwni"]
 
 [ext_resource type="Theme" uid="uid://bf3kkfbng2xnu" path="res://UI/ui_theme.tres" id="1_oy1ku"]
-[ext_resource type="Script" uid="uid://c2nqrdeyedf80" path="res://UI/combo_indicator.gd" id="2_y760n"]
+[ext_resource type="Script" uid="uid://c2nqrdeyedf80" path="res://UI/game/combo_indicator.gd" id="2_y760n"]
 
 [node name="ComboIndicator" type="Label"]
 offset_right = 40.0

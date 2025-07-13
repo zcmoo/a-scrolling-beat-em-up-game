@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://ebt4x15j2fec"]
+
+[ext_resource type="PackedScene" uid="uid://b0bsbj1vmcv5u" path="res://UI/option/h_box_container.tscn" id="1_4jyx2"]
+
+[node name="LablePicker" instance=ExtResource("1_4jyx2")]
+text = "RETURN"

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bwr1ox4whk2al"]
 
-[ext_resource type="Script" uid="uid://bfq3m8rawjfbe" path="res://UI/health_bar.gd" id="1_0yf5l"]
+[ext_resource type="Script" uid="uid://bfq3m8rawjfbe" path="res://UI/game/health_bar.gd" id="1_0yf5l"]
 [ext_resource type="Texture2D" uid="uid://bptyok1h1p7aq" path="res://assets/assets/art/ui/healthbar-tick.png" id="1_6f3ms"]
 
 [node name="HealthBar" type="Control"]

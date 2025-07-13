@@ -1,0 +1,68 @@
+[gd_scene load_steps=6 format=3 uid="uid://c01wtngjij6x7"]
+
+[ext_resource type="Theme" uid="uid://bf3kkfbng2xnu" path="res://UI/ui_theme.tres" id="1_8dl5m"]
+[ext_resource type="Script" uid="uid://cmqjklrnkwlt7" path="res://UI/option/option_screen.gd" id="1_l0y0q"]
+[ext_resource type="PackedScene" uid="uid://bmht8t3wodekf" path="res://UI/option/activeable_container.tscn" id="2_35gqp"]
+[ext_resource type="PackedScene" uid="uid://d1xxp42ncqx2d" path="res://UI/option/togge_picker.tscn" id="3_02weq"]
+[ext_resource type="PackedScene" uid="uid://ebt4x15j2fec" path="res://UI/option/lable_picker.tscn" id="4_opnik"]
+
+[node name="OptionScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_l0y0q")
+
+[node name="BackGroud" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0784314, 0.0784314, 0.0784314, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="BackGroud"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 13
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 13
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BackGroud/MarginContainer"]
+layout_mode = 2
+
+[node name="Option Lable" type="Label" parent="BackGroud/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_8dl5m")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "OPTIONS"
+horizontal_alignment = 1
+
+[node name="Control" type="Control" parent="BackGroud/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MusicControl" parent="BackGroud/MarginContainer/VBoxContainer" instance=ExtResource("2_35gqp")]
+layout_mode = 2
+text = "MUSIC"
+
+[node name="SFXControl" parent="BackGroud/MarginContainer/VBoxContainer" instance=ExtResource("2_35gqp")]
+layout_mode = 2
+text = "SFX"
+
+[node name="ShakeToggePicker" parent="BackGroud/MarginContainer/VBoxContainer" instance=ExtResource("3_02weq")]
+layout_mode = 2
+
+[node name="Control2" type="Control" parent="BackGroud/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Return" parent="BackGroud/MarginContainer/VBoxContainer" instance=ExtResource("4_opnik")]
+layout_mode = 2
+alignment = 1

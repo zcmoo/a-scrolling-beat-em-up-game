@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://b0bsbj1vmcv5u"]
+
+[ext_resource type="Script" uid="uid://dqswjibq6aef5" path="res://UI/option/h_box_container.gd" id="1_fb0l8"]
+[ext_resource type="Theme" uid="uid://bf3kkfbng2xnu" path="res://UI/ui_theme.tres" id="2_ynb88"]
+
+[node name="ActiveableContainer" type="HBoxContainer"]
+offset_right = 30.0
+offset_bottom = 6.0
+theme_override_constants/separation = 0
+script = ExtResource("1_fb0l8")
+color_defaults = Color(0.439216, 0.439216, 0.439216, 1)
+color_active = Color(0.815686, 0.815686, 0, 1)
+
+[node name="Label" type="Label" parent="."]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+theme = ExtResource("2_ynb88")
+theme_override_colors/font_color = Color(0.99558, 0.99558, 0.99558, 1)
+text = "OPTION"

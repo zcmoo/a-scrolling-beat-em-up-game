@@ -1,0 +1,60 @@
+[gd_scene load_steps=3 format=3 uid="uid://bmht8t3wodekf"]
+
+[ext_resource type="PackedScene" uid="uid://b0bsbj1vmcv5u" path="res://UI/option/h_box_container.tscn" id="1_l6r2k"]
+[ext_resource type="Texture2D" uid="uid://deult7j32ifof" path="res://assets/assets/art/ui/ui-tick-on.png" id="2_b4o7g"]
+
+[node name="RangPicker" instance=ExtResource("1_l6r2k")]
+
+[node name="TicksContainer" type="HBoxContainer" parent="." index="1"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="TextureRect" type="TextureRect" parent="TicksContainer" index="0"]
+layout_mode = 2
+texture = ExtResource("2_b4o7g")
+stretch_mode = 2
+
+[node name="TextureRect2" type="TextureRect" parent="TicksContainer" index="1"]
+layout_mode = 2
+texture = ExtResource("2_b4o7g")
+stretch_mode = 2
+
+[node name="TextureRect3" type="TextureRect" parent="TicksContainer" index="2"]
+layout_mode = 2
+texture = ExtResource("2_b4o7g")
+stretch_mode = 2
+
+[node name="TextureRect4" type="TextureRect" parent="TicksContainer" index="3"]
+layout_mode = 2
+texture = ExtResource("2_b4o7g")
+stretch_mode = 2
+
+[node name="TextureRect5" type="TextureRect" parent="TicksContainer" index="4"]
+layout_mode = 2
+texture = ExtResource("2_b4o7g")
+stretch_mode = 2
+
+[node name="TextureRect6" type="TextureRect" parent="TicksContainer" index="5"]
+layout_mode = 2
+texture = ExtResource("2_b4o7g")
+stretch_mode = 2
+
+[node name="TextureRect7" type="TextureRect" parent="TicksContainer" index="6"]
+layout_mode = 2
+texture = ExtResource("2_b4o7g")
+stretch_mode = 2
+
+[node name="TextureRect8" type="TextureRect" parent="TicksContainer" index="7"]
+layout_mode = 2
+texture = ExtResource("2_b4o7g")
+stretch_mode = 2
+
+[node name="TextureRect9" type="TextureRect" parent="TicksContainer" index="8"]
+layout_mode = 2
+texture = ExtResource("2_b4o7g")
+stretch_mode = 2
+
+[node name="TextureRect10" type="TextureRect" parent="TicksContainer" index="9"]
+layout_mode = 2
+texture = ExtResource("2_b4o7g")
+stretch_mode = 2
