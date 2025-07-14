@@ -25,6 +25,7 @@ size = Vector2(7, 73)
 script = ExtResource("1_tlwt5")
 
 [node name="UI" parent="." instance=ExtResource("2_ic0uy")]
+process_mode = 3
 duration_health_visible = 1000
 
 [node name="Stage-01-Street" parent="." instance=ExtResource("11_k3n1d")]

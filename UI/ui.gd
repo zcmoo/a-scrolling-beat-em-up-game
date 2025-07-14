@@ -7,6 +7,7 @@ extends CanvasLayer
 @onready var score_indicator: ScoreIndicator = $UIContainer/ScoreIndicator
 @onready var go_indicator: TextureRect = $UIContainer/GoIndicator
 @export var duration_health_visible: int
+var option_screen: OptionScreen = null
 var time_start_healthbar_visible = Time.get_ticks_msec()
 const avatar_map: Dictionary = {
 	Character.Type.GOON: preload("res://assets/assets/art/ui/avatars/avatar-goon.png"),
@@ -14,6 +15,7 @@ const avatar_map: Dictionary = {
 	Character.Type.THUG: preload("res://assets/assets/art/ui/avatars/avatar-thug.png"),
 	Character.Type.BOSS: preload("res://assets/assets/art/ui/avatars/avatar-boss.png")
 }
+const OPTION_SCREEN_PREFAB = preload("res://UI/option/option_screen.tscn")
 
 
 func _init() -> void:
@@ -32,6 +34,21 @@ func _process(delta: float) -> void:
 	if enemy_healthbar.visible and(Time.get_ticks_msec() - time_start_healthbar_visible > duration_health_visible):
 		enemy_avatar.visible = false
 		enemy_healthbar.visible = false
+	handle_input()
+
+func handle_input() -> void:
+	if Input.is_action_just_pressed("option"):
+		if option_screen == null:
+			option_screen = OPTION_SCREEN_PREFAB.instantiate()
+			add_child(option_screen)
+			option_screen.exit.connect(unpause.bind())
+			get_tree().paused = true
+		else:
+			unpause()
+
+func unpause() -> void:
+	option_screen.queue_free()
+	get_tree().paused = false
 
 func on_character_health_change(type: Character.Type, current_health: int, max_health: int):
 	if type == Character.Type.PLAYER:

@@ -17,9 +17,10 @@ func _input(event: InputEvent) -> void:
 		set_zoom(Vector2(1, 1))
 		return		
 
-func	 on_heavy_below_received() -> void:
-	is_shaking = true
-	time_start_shaking = Time.get_ticks_msec()
+func on_heavy_below_received() -> void:
+	if OptionManager.is_screen_shake_enable:
+		is_shaking = true
+		time_start_shaking = Time.get_ticks_msec()
 
 func _process(delta: float) -> void:
 	if is_shaking and (Time.get_ticks_msec() - time_start_shaking) < DURATION_SHAKE:
