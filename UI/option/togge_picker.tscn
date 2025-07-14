@@ -1,10 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://d1xxp42ncqx2d"]
+[gd_scene load_steps=4 format=3 uid="uid://d1xxp42ncqx2d"]
 
 [ext_resource type="PackedScene" uid="uid://b0bsbj1vmcv5u" path="res://UI/option/h_box_container.tscn" id="1_340ua"]
+[ext_resource type="Script" uid="uid://bjps16n7rg7g5" path="res://UI/option/togge_picker.gd" id="2_jfe18"]
 [ext_resource type="Theme" uid="uid://bf3kkfbng2xnu" path="res://UI/ui_theme.tres" id="2_nxl5w"]
 
 [node name="ToggePicker" instance=ExtResource("1_340ua")]
+script = ExtResource("2_jfe18")
 text = "SHAKE"
+current_value = 1
+max_value = 1
 
 [node name="valueLable" type="Label" parent="." index="1"]
 custom_minimum_size = Vector2(30, 0)

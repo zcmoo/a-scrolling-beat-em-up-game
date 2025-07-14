@@ -19,9 +19,11 @@ func refresh() -> void:
 func handle_input() -> void:
 	if Input.is_action_just_pressed("ui_down"):
 		current_selection_index = (current_selection_index + 1) % activables.size()
+		SoundPlayer.play(SoundManager.Sound.CLICK)
 		refresh()
 	if Input.is_action_just_pressed("ui_up"):
 		current_selection_index = (current_selection_index - 1 + activables.size()) % activables.size()
+		SoundPlayer.play(SoundManager.Sound.CLICK)
 		refresh()
 
 func _process(delta: float) -> void:

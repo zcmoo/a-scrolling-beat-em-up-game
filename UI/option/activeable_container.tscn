@@ -1,9 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://bmht8t3wodekf"]
+[gd_scene load_steps=4 format=3 uid="uid://bmht8t3wodekf"]
 
 [ext_resource type="PackedScene" uid="uid://b0bsbj1vmcv5u" path="res://UI/option/h_box_container.tscn" id="1_l6r2k"]
 [ext_resource type="Texture2D" uid="uid://deult7j32ifof" path="res://assets/assets/art/ui/ui-tick-on.png" id="2_b4o7g"]
+[ext_resource type="Script" uid="uid://t7jofxnb7b1y" path="res://UI/option/activeable_container.gd" id="2_m0w46"]
 
 [node name="RangPicker" instance=ExtResource("1_l6r2k")]
+script = ExtResource("2_m0w46")
+current_value = 5
+max_value = 10
 
 [node name="TicksContainer" type="HBoxContainer" parent="." index="1"]
 layout_mode = 2
