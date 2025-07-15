@@ -8,6 +8,8 @@ extends CanvasLayer
 @onready var go_indicator: TextureRect = $UIContainer/GoIndicator
 @export var duration_health_visible: int
 var option_screen: OptionScreen = null
+var death_screen: DeathScreen = null
+var gameover_screen: GameOverScreen = null
 var time_start_healthbar_visible = Time.get_ticks_msec()
 const avatar_map: Dictionary = {
 	Character.Type.GOON: preload("res://assets/assets/art/ui/avatars/avatar-goon.png"),
@@ -16,6 +18,8 @@ const avatar_map: Dictionary = {
 	Character.Type.BOSS: preload("res://assets/assets/art/ui/avatars/avatar-boss.png")
 }
 const OPTION_SCREEN_PREFAB = preload("res://UI/option/option_screen.tscn")
+const DEATH_SCRREN_PREFAB = preload("res://UI/game/DeathSreen.tscn")
+const GAMEOVER_SCREEN_PREFAB = preload("res://UI/game/game_over_screen.tscn")
 
 
 func _init() -> void:
@@ -45,6 +49,9 @@ func handle_input() -> void:
 			get_tree().paused = true
 		else:
 			unpause()
+	elif Input.is_action_just_pressed("确定"):
+		if option_screen != null:
+			unpause()
 
 func unpause() -> void:
 	option_screen.queue_free()
@@ -53,6 +60,10 @@ func unpause() -> void:
 func on_character_health_change(type: Character.Type, current_health: int, max_health: int):
 	if type == Character.Type.PLAYER:
 		player_healthbar.refresh(current_health, max_health)
+		if current_health <= 0 and death_screen == null:
+			death_screen = DEATH_SCRREN_PREFAB.instantiate()
+			death_screen.game_over.connect(on_game_over.bind())
+			add_child(death_screen)
 	else:
 		time_start_healthbar_visible = Time.get_ticks_msec()
 		enemy_avatar.texture = avatar_map[type]
@@ -62,3 +73,9 @@ func on_character_health_change(type: Character.Type, current_health: int, max_h
 
 func on_checkpoint_complete() -> void:
 	go_indicator.start_flickering()
+
+func on_game_over() -> void:
+	if gameover_screen == null:
+		gameover_screen = GAMEOVER_SCREEN_PREFAB.instantiate()
+		gameover_screen.set_score(score_indicator.real_score)
+		add_child(gameover_screen)

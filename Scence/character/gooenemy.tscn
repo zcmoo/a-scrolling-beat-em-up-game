@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://cf6xi5m0i4gj" path="res://assets/assets/art/characters/enemy_goon.png" id="2_3m8t8"]
 
 [node name="Goonenemy" instance=ExtResource("1_7av36")]
+duration_between_range_attack = 800
 type = 2
 damage_gun_shot = 20.0
 duration_ground = 700.0

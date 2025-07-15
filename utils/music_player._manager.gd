@@ -13,12 +13,15 @@ const MUSIC_MAP: Dictionary = {
 
 func _ready() -> void:
 	if autoplay_music != null:
-		music_stream_player.stream = autoplay_music
-		music_stream_player.play()
+		setup_and_play(autoplay_music)
 
-func play(music: Music) -> void:
+func play(music: Music, loop: bool = true) -> void:
 	if music_stream_player.is_node_ready():	
-		music_stream_player.stream = MUSIC_MAP[music]
-		music_stream_player.play()
+		setup_and_play(MUSIC_MAP[music], loop)
 	else:
 		autoplay_music = MUSIC_MAP[music]
+
+func setup_and_play(stream: AudioStream, loop: bool = true) -> void:
+	music_stream_player.stream = stream
+	stream.loop = loop
+	music_stream_player.play()

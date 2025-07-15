@@ -17,4 +17,4 @@ func _ready() -> void:
 		EntityManager.ofphan_actor.emit(door)
 	for check_point: Checkpoint in check_points.get_children():
 		check_point.creat_enemy_data()
-	MusicPlayer.play(music)
+	MusicPlayer.play(music, true)

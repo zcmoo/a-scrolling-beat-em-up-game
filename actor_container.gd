@@ -24,6 +24,7 @@ func _init() -> void:
 	EntityManager.sqawn_shot.connect(on_spawn_shot.bind())
 	EntityManager.spawn_enemy.connect(on_spawn_enemy.bind())
 	EntityManager.spawn_park.connect(on_spawn_spark.bind())
+	DamageManager.player_revive.connect(on_player_revive.bind())
 
 func on_spawn_colletible(type: COllectible.Type, initial_state: COllectible.State, collectible_globle_postion: Vector2, collectible_direction: Vector2, initial_height: float, auto_distroy: bool) -> void:
 	var collectible: COllectible = PREB_MAP[type].instantiate()
@@ -62,3 +63,10 @@ func on_spawn_spark(spark_postion: Vector2) -> void:
 	var spark_instance = SPARK_PREFAB.instantiate()
 	spark_instance.position = spark_postion
 	add_child(spark_instance)
+
+func on_player_revive() -> void:
+	for child in get_children():
+		if child is Character:
+			var charater: Character = child as Character
+			if charater.type != Character.Type.PLAYER:
+				charater.on_rececive_damage(0, Vector2.ZERO, DamageReceiver.HIType.KNOCKDOWN)

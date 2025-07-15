@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/stage-01.mp3-f4a46152882c32632d9b49f4316b96c8
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0
 bpm=0
 beat_count=0

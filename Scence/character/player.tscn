@@ -754,6 +754,9 @@ max_ammo_per_gun = 3
 jump_intensity = 150.0
 speed = 50.0
 
+[node name="ShadowSprite" parent="." index="0"]
+visible = false
+
 [node name="CharacterSprite" parent="." index="1"]
 texture = ExtResource("2_dyfjb")
 centered = false
@@ -762,6 +765,7 @@ hframes = 10
 vframes = 10
 
 [node name="CollisionShape2D" parent="." index="2"]
+visible = false
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_x4tp7")
 
@@ -772,23 +776,28 @@ libraries = {
 autoplay = "idle"
 
 [node name="DamageEmiter" parent="." index="4"]
+visible = false
 position = Vector2(0, -12)
 collision_mask = 96
 
 [node name="CollisionShape2D" parent="DamageEmiter" index="0"]
+visible = false
 position = Vector2(7, 0)
 debug_color = Color(0.442608, 0.481023, 0.923922, 0.42)
 
 [node name="DamageReceiver" parent="." index="5"]
+visible = false
 collision_layer = 16
 monitorable = true
 
 [node name="CollisionShape2D" parent="DamageReceiver" index="0"]
+visible = false
 position = Vector2(0, -15)
 shape = SubResource("RectangleShape2D_x4tp7")
 debug_color = Color(0.615337, 0.519623, 0.379195, 0.42)
 
 [node name="EnemySlots" type="Node2D" parent="." index="6"]
+visible = false
 
 [node name="EnemySlot" parent="EnemySlots" index="0" instance=ExtResource("4_k61ru")]
 position = Vector2(12, -4)
@@ -802,7 +811,14 @@ position = Vector2(-12, -4)
 [node name="EnemySlot4" parent="EnemySlots" index="3" instance=ExtResource("4_k61ru")]
 position = Vector2(-12, 3)
 
+[node name="collateralDamageEmiter" parent="." index="7"]
+visible = false
+
+[node name="CollisionShape2D" parent="collateralDamageEmiter" index="0"]
+visible = false
+
 [node name="GunSprite" parent="." index="8"]
+visible = false
 texture = ExtResource("5_8tbf0")
 centered = false
 offset = Vector2(-24, -48)
@@ -810,6 +826,7 @@ hframes = 10
 vframes = 10
 
 [node name="KnifeSprite" parent="." index="9"]
+visible = false
 texture = ExtResource("5_61j3e")
 centered = false
 offset = Vector2(-24, -48)
@@ -820,13 +837,16 @@ vframes = 10
 position = Vector2(18, -14)
 
 [node name="RayCast2D" parent="." index="10"]
+visible = false
 collision_mask = 12
 
 [node name="CollectibleSensor" parent="." index="11"]
+visible = false
 collision_mask = 256
 monitoring = true
 
 [node name="CollisionShape2D" parent="CollectibleSensor" index="0"]
+visible = false
 shape = SubResource("RectangleShape2D_61j3e")
 
 [editable path="DamageEmiter"]

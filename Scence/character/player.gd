@@ -1,14 +1,22 @@
 class_name Player
 extends Character
 @export var max_duration_between_successful_hit : int
-@onready var enemy_slots : Array = $EnemySlots.get_children()
+@onready var enemy_slots: Array = $EnemySlots.get_children()
 var time_since_last_successful_attack = Time.get_ticks_msec()
+const REVIVE_HEIGHT = 80
 
 
 func _ready() -> void:
 	super._ready()
+	DamageManager.player_revive.connect(on_player_revive.bind())
 	anim_attack = ["punch", "punch_alt", "kick", "round_kick"]
-	
+
+func on_player_revive() -> void:
+	current_health = health
+	set_health(current_health)
+	state = State.JUMP
+	height = REVIVE_HEIGHT
+
 func _process(delta: float) -> void:
 	super._process(delta)
 	process_time_between_combos()
@@ -16,13 +24,14 @@ func _process(delta: float) -> void:
 func process_time_between_combos() -> void:
 	if Time.get_ticks_msec() - time_since_last_successful_attack > max_duration_between_successful_hit:
 		attack_combo_index = 0
-	
+
 # 处理键盘玩家键盘输入并根据键盘输入切换状态
 func handle_input() -> void:
 	if can_move():
 		var direction = Input.get_vector("ui_left","ui_right","ui_up","ui_down")
 		velocity = direction * speed
 	if can_attack() and Input.is_action_just_pressed("attack"):
+		velocity = Vector2.ZERO
 		if has_knife:
 			state = State.THROW
 		elif has_gun:
@@ -53,7 +62,6 @@ func handle_input() -> void:
 	if can_jump_kick() and Input.is_action_just_pressed("attack"):
 		state = State.JUMPKICK
 		SoundPlayer.play(SoundManager.Sound.MISS)
-
 # 给离给定位置最近的敌人占一个位置并返回这个位置
 func reserve_slot(enemy: BaiscEnemy) -> EnemySlot:
 	var available_slots = enemy_slots.filter(func(slot: EnemySlot): return slot.is_free())

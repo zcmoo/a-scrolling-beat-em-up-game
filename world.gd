@@ -3,6 +3,7 @@ extends Node2D
 @onready var camera = %Camera2D
 var is_camera_locked = false
 
+
 func _ready() -> void:
 	StageManager.checkpoint_start.connect(on_checkpoint_start.bind())
 	StageManager.checkpoint_complete.connect(on_checkpoint_complete.bind())

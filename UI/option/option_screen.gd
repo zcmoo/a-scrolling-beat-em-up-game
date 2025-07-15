@@ -16,7 +16,7 @@ func _ready() -> void:
 	shake_control.set_value(OptionManager.is_screen_shake_enable as int)
 	music_control.value_change.connect(on_music_value_change.bind())
 	sfx_control.value_change.connect(on_sfx_value_change.bind())
-	sfx_control.value_change.connect(on_is_shake_value_change.bind())
+	shake_control.value_change.connect(on_is_shake_value_change.bind())
 	return_control.press.connect(on_return_press.bind())
 	refresh()
 

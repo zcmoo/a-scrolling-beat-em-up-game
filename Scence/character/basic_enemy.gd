@@ -41,7 +41,8 @@ func goto_melee_postion() -> void:
 # 重写父节点的函数让敌人死后让出给定位置
 func on_rececive_damage(damage: int, directinon: Vector2, hi_type: DamageReceiver.HIType) -> void:
 	super.on_rececive_damage(damage, directinon, hi_type)
-	ComboManager.register_hit.emit()
+	if damage > 0:
+		ComboManager.register_hit.emit()
 	if current_health == 0 or hi_type == DamageReceiver.HIType.POWER:
 		EntityManager.spawn_park.emit(self.position)
 	if current_health <= 0:
