@@ -15,6 +15,7 @@ const ENEMY_MAP = {
 	Character.Type.GOON : preload("res://Scence/character/gooenemy.tscn"),
 	Character.Type.THUG : preload("res://Scence/character/thug_enemy.tscn"),
 	Character.Type.BOSS : preload("res://Scence/character/lgor_boss.tscn"),
+	Character.Type.BOSS2 : preload("res://Scence/character/lgor_boss_2.tscn"),
 }
 
 
@@ -48,6 +49,9 @@ func on_spawn_enemy(enemy_data: Data) -> void:
 	enemy.state = enemy_data.state
 	enemy.player = player
 	if enemy_data.type == Character.Type.BOSS:
+		enemy.left_wall = left_wall
+		enemy.right_wall = right_wall
+	if enemy_data.type == Character.Type.BOSS2:
 		enemy.left_wall = left_wall
 		enemy.right_wall = right_wall
 	if enemy_data.door_index > -1:

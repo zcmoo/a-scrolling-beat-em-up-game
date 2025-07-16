@@ -40,3 +40,5 @@ shape = SubResource("RectangleShape2D_i3pyn")
 [node name="Doors" type="Node2D" parent="."]
 
 [node name="Fixtures" type="Node2D" parent="."]
+
+[node name="SpawnLocation" type="Node2D" parent="."]

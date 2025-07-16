@@ -1,6 +1,6 @@
 extends Node
 var is_screen_shake_enable = true
-var music_volume = 3
+var music_volume = 5
 var sfx_volume = 5
 
 

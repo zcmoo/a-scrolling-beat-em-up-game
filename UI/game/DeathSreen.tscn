@@ -14,7 +14,7 @@ theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 script = ExtResource("1_l20kb")
-count_down_start = 2
+count_down_start = 10
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 2

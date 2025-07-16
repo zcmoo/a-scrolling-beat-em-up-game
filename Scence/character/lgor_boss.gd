@@ -5,7 +5,7 @@ extends Character
 @export var duration_vulnerable : int
 @export var left_wall: AnimatableBody2D 
 @export var right_wall: AnimatableBody2D 
-const DISTANCE_FROM_PLAYER = 25
+@export var distance_from_player: int
 const GROUND_FRICTION = 80
 var knockback_force = Vector2.ZERO
 var death_flag = false
@@ -21,9 +21,9 @@ func _process(delta: float) -> void:
 func get_target_destination() -> Vector2:
 	var target = Vector2.ZERO
 	if position.x < player.position.x:
-		target = player.position + Vector2.LEFT * DISTANCE_FROM_PLAYER
+		target = player.position + Vector2.LEFT * distance_from_player
 	else:
-		target = player.position + Vector2.RIGHT * DISTANCE_FROM_PLAYER
+		target = player.position + Vector2.RIGHT * distance_from_player
 	return target
 
 func is_player_within_rang() -> bool:

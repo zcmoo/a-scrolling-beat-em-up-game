@@ -33,7 +33,7 @@ extends CharacterBody2D
 @onready var weapon_postion : Node2D = $KnifeSprite/WeaponPostion 
 @onready var gun_sprite : Sprite2D = $GunSprite
 enum State {IDLE, WALK, ATTACK, TAKE_OFF, JUMP, LAND, JUMPKICK, HURT, FALL, GROUND, DEATH, FLY, PREP_ATTACK, THROW, PICK_UP, SHOOT, PRE_SHOOT, RECOVER, DROP, WAITING, APPEARING}
-enum Type {PLAYER, PUNK, GOON, THUG, BOSS}
+enum Type {PLAYER, PUNK, GOON, THUG, BOSS, BOSS2}
 const GRAVITY = 500
 var state = State.IDLE
 var height = 0.0
@@ -101,11 +101,11 @@ func _process(delta: float) -> void:
 func setup_collisions() -> void:
 	damage_receciver.monitorable = can_get_hurt()
 	collision_shape.disabled = is_collision_disabled()
-	if self.type != Character.Type.BOSS:
+	if self.type != Character.Type.BOSS and self.type != Character.Type.BOSS2:
 		damage_emiter.monitoring = is_attacking()
 	else:
 		damage_emiter.monitoring = state == State.FLY
-	if self.type != Character.Type.BOSS:
+	if self.type != Character.Type.BOSS and self.type != Character.Type.BOSS2:
 		collater_damage_emiter.monitoring = state == State.FLY
 	else:
 		collater_damage_emiter.monitoring = is_attacking()
@@ -293,7 +293,7 @@ func on_pick_up_complete() -> void:
 	pickup_collectible()
 
 func can_pick_up() -> bool:
-	if can_resqawn_knives:
+	if self.type != Character.Type.PLAYER:
 		return false
 	if Time.get_ticks_msec() - time_since_knife_dismiss < duration_between_knife_resqawn:
 		return false

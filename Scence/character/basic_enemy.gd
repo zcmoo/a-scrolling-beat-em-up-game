@@ -45,7 +45,7 @@ func on_rececive_damage(damage: int, directinon: Vector2, hi_type: DamageReceive
 		ComboManager.register_hit.emit()
 	if current_health == 0 or hi_type == DamageReceiver.HIType.POWER:
 		EntityManager.spawn_park.emit(self.position)
-	if current_health <= 0:
+	if current_health == 0:
 		player.free_slot(self)
 		EntityManager.death_enemy.emit(self)
 # 重写父节点的设置朝向的函数让敌人朝正确方向

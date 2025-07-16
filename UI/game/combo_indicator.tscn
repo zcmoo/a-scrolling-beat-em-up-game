@@ -9,4 +9,4 @@ offset_bottom = 23.0
 theme = ExtResource("1_oy1ku")
 text = "x10"
 script = ExtResource("2_y760n")
-duration_combo_timeout = 3000
+duration_combo_timeout = 300

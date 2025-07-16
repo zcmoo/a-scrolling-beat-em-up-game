@@ -749,10 +749,20 @@ size = Vector2(3, 3)
 collision_layer = 2
 collision_mask = 137
 script = ExtResource("2_x4tp7")
-max_duration_between_successful_hit = 0
+max_duration_between_successful_hit = 2000
+can_respawn = true
+damage = 30
+health = 300
+damage_power = 20
+damage_gun_shot = 300.0
 max_ammo_per_gun = 3
+duration_ground = 500.0
+flight_speed = 100.0
 jump_intensity = 150.0
 speed = 50.0
+knockdown_intensity = 80.0
+knockback_intensity = 20.0
+autodestroy_on_drop = true
 
 [node name="ShadowSprite" parent="." index="0"]
 visible = false

@@ -4,7 +4,6 @@ extends MarginContainer
 @onready var timer = $Timer
 @export var count_down_start: int
 var current_count = 0
-signal game_over
 
 
 func _ready() -> void:
@@ -22,7 +21,7 @@ func on_time_timeout() -> void:
 		current_count -= 1
 		refresh()
 	else:
-		game_over.emit()
+		StageManager.game_over.emit(false)
 		queue_free()
 
 func refresh() -> void:

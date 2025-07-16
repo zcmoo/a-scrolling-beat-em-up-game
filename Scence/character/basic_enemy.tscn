@@ -494,7 +494,7 @@ health = 200
 damage_gun_shot = 5.0
 duration_ground = 500.0
 flight_speed = 120.0
-speed = 35.0
+speed = 30.0
 knockdown_intensity = 80.0
 knockback_intensity = 50.0
 

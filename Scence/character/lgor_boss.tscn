@@ -185,6 +185,7 @@ collision_layer = 4
 script = ExtResource("2_hjetx")
 duration_between_attack = 1500
 duration_vulnerable = 1000
+distance_from_player = 25
 type = 4
 damage = 30
 health = 300

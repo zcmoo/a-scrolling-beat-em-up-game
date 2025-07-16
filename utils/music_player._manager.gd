@@ -21,6 +21,10 @@ func play(music: Music, loop: bool = true) -> void:
 	else:
 		autoplay_music = MUSIC_MAP[music]
 
+func stop() -> void:
+	if music_stream_player.is_playing():
+		music_stream_player.stop()
+
 func setup_and_play(stream: AudioStream, loop: bool = true) -> void:
 	music_stream_player.stream = stream
 	stream.loop = loop
